@@ -307,11 +307,11 @@
         "requiredFor": ["astro-check", "status"]
       },
       "scraperapi": {
-        "description": "Web scraping for competitor content analysis",
+        "description": "HTML fetching, header analysis, schema parsing",
         "command": "npx",
-        "args": ["@scraperapi/mcp"],
-        "optional": true,
-        "requiredFor": ["audit-content competitor analysis"],
+        "args": ["-y", "scraperapi-mcp"],
+        "optional": false,
+        "requiredFor": ["audit-site", "audit-content", "audit-schema", "audit-security"],
         "env": ["SCRAPERAPI_KEY"]
       }
     }

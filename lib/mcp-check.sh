@@ -192,7 +192,7 @@ ScraperAPI MCP Setup:
      "mcpServers": {
        "scraperapi": {
          "command": "npx",
-         "args": ["-y", "scraperapi-mcp-server"],
+         "args": ["-y", "scraperapi-mcp"],
          "env": {
            "SCRAPERAPI_KEY": "${SCRAPERAPI_KEY}"
          }

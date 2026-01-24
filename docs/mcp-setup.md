@@ -95,7 +95,8 @@ Or configure in Claude Code MCP settings:
 {
   "mcpServers": {
     "dataforseo": {
-      "command": "dataforseo-mcp-server",
+      "command": "npx",
+      "args": ["-y", "dataforseo-mcp-server"],
       "env": {
         "DATAFORSEO_USERNAME": "your_username",
         "DATAFORSEO_PASSWORD": "your_api_key"
@@ -147,7 +148,8 @@ Or configure in Claude Code MCP settings:
 {
   "mcpServers": {
     "scraperapi": {
-      "command": "scraperapi-mcp-server",
+      "command": "npx",
+      "args": ["-y", "scraperapi-mcp"],
       "env": {
         "SCRAPERAPI_KEY": "your_api_key"
       }

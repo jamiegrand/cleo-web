@@ -120,7 +120,8 @@ cleo-web requires MCP servers for full SEO functionality.
    {
      "mcpServers": {
        "dataforseo": {
-         "command": "dataforseo-mcp-server",
+         "command": "npx",
+         "args": ["-y", "dataforseo-mcp-server"],
          "env": {
            "DATAFORSEO_USERNAME": "your_username",
            "DATAFORSEO_PASSWORD": "your_api_key"
