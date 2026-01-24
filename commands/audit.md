@@ -182,10 +182,159 @@ Audit results stored in `.cleo-web/metrics.db`:
 
 ## Auto-Task Creation
 
-Issues with severity `high` or `critical` automatically create tasks:
+**ALL issues** (critical, high, medium, low) automatically create tasks:
 ```
 Created task T015: Fix meta description on /blog/my-post
-  Epic: SEO
+  Priority: high
   Labels: audit, onpage
   Source: audit-content
 ```
+
+Tasks are sorted by priority so critical items appear first.
+
+---
+
+## Extended Audit Commands (NEW)
+
+### /audit mobile [url]
+
+Mobile-specific audit checking:
+- Mobile Core Web Vitals (LCP, INP, CLS)
+- Viewport meta tag configuration
+- Tap target sizing (48x48px minimum)
+- Font size legibility (>=16px)
+- Content width fits viewport
+- Mobile-first indexing readiness
+- Content parity with desktop
+
+**Output:**
+```
+MOBILE AUDIT: example.com
+────────────────────────────────────────
+
+Mobile Performance: 62/100
+
+Core Web Vitals (Mobile):
+  LCP: 3.2s  ✗ Poor (> 2.5s)
+  INP: 180ms ✓ Good (< 200ms)
+  CLS: 0.08  ✓ Good (< 0.1)
+
+Mobile-Specific Checks:
+  ✓ Viewport meta configured
+  ✗ Tap targets too small (3 issues)
+  ✓ Font sizes legible
+  ✓ Content fits viewport
+  ✗ Mobile-first not ready
+
+Issues:
+• [CRITICAL] LCP > 2.5s - optimize hero image
+• [HIGH] Tap targets on /contact too small
+```
+
+### /audit international
+
+International SEO (hreflang) audit:
+- hreflang tags present on pages
+- x-default hreflang defined
+- Reciprocal link validation
+- HTML lang attribute
+- Content-Language header
+- Geo-targeting strategy consistency
+
+**Output:**
+```
+INTERNATIONAL SEO AUDIT: example.com
+────────────────────────────────────────
+
+International Score: 75/100
+
+hreflang Analysis:
+  Pages with hreflang: 45/50
+  x-default defined: Yes
+  Reciprocal valid: 40/45 (5 broken)
+
+Language Setup:
+  ✓ HTML lang attribute set
+  ⚠ Content-Language header missing
+  ✓ Geo-targeting: subdirectory (/en/, /de/, /fr/)
+
+Issues:
+• [CRITICAL] 5 pages have broken reciprocal hreflang
+• [HIGH] Missing hreflang on 5 pages
+• [MEDIUM] Content-Language header not set
+```
+
+### /audit social [url]
+
+Social media meta tag audit:
+- Open Graph tags (og:title, og:description, og:image, og:url, og:type)
+- Twitter Card tags
+- Image dimension validation
+- Canonical consistency
+
+**Output:**
+```
+SOCIAL META AUDIT: /blog/my-post
+────────────────────────────────────────
+
+Open Graph Score: 80/100
+Twitter Card Score: 70/100
+
+Open Graph:
+  ✓ og:title present
+  ✓ og:description present
+  ✓ og:image present (1200x630)
+  ✓ og:url matches canonical
+  ✗ og:type missing
+
+Twitter Card:
+  ✓ twitter:card (summary_large_image)
+  ✗ twitter:title missing
+  ✗ twitter:description missing
+  ✓ twitter:image valid
+
+Issues:
+• [HIGH] Missing og:image on 8 blog posts
+• [MEDIUM] Missing twitter:title/description
+```
+
+### /audit competitors
+
+Competitor benchmarking (requires `/competitor add` first):
+- Domain authority comparison
+- Keyword overlap analysis
+- Keyword gap opportunities
+- Backlink profile comparison
+- Performance comparison
+
+**Output:**
+```
+COMPETITOR ANALYSIS: example.com
+────────────────────────────────────────
+
+Your Domain Rank: 45
+
+Competitor Comparison:
+  competitor-a.com  Rank: 52  Keywords: 1,234  Overlap: 45%
+  competitor-b.com  Rank: 38  Keywords: 892   Overlap: 32%
+  industry-leader.com  Rank: 78  Keywords: 5,678  Overlap: 28%
+
+Keyword Gaps (they rank, you don't):
+  • "keyword phrase 1" - competitor-a.com ranks #3
+  • "keyword phrase 2" - competitor-b.com ranks #5
+  • "keyword phrase 3" - industry-leader.com ranks #1
+
+Backlink Opportunities:
+  • 45 domains link to competitors but not you
+  • Top opportunity: techblog.com (DA 65)
+
+Performance:
+  Your LCP: 2.1s  vs  Avg competitor: 2.4s ✓ Better
+```
+
+## Related Commands
+
+- `/budget set <metric> <threshold>` - Set performance budgets
+- `/budget list` - View current budgets
+- `/competitor add <domain>` - Add competitor to track
+- `/competitor list` - View tracked competitors

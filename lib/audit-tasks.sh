@@ -15,7 +15,8 @@ source "${AUDIT_TASKS_LIB_DIR}/file-ops.sh" 2>/dev/null || true
 # =============================================================================
 
 # Severities that trigger auto-task creation
-AUTO_TASK_SEVERITIES="critical high"
+# ALL severities create tasks for full visibility
+AUTO_TASK_SEVERITIES="critical high medium low"
 
 # Task priority mapping from audit severity
 declare -A SEVERITY_TO_PRIORITY
@@ -233,26 +234,28 @@ create_tasks_from_audit_results() {
     local tasks_created=0
 
     # Query failing checks from database
+    # Creates tasks for ALL severities (critical, high, medium, low)
     local checks
     checks=$(sqlite3 -json "$db_file" "
         SELECT
             ac.check_code,
             ac.category,
-            cd.severity,
+            cd.severity_if_fail as severity,
             cd.description,
             ac.fix_suggestion,
-            cd.max_points || ' points' as impact
+            cd.max_score || ' points' as impact
         FROM audit_checks ac
         JOIN check_definitions cd ON ac.check_code = cd.check_code
         WHERE ac.audit_id = ${audit_id}
           AND ac.status IN ('fail', 'warn')
-          AND cd.severity IN ('critical', 'high')
         ORDER BY
-            CASE cd.severity
+            CASE cd.severity_if_fail
                 WHEN 'critical' THEN 1
                 WHEN 'high' THEN 2
+                WHEN 'medium' THEN 3
+                WHEN 'low' THEN 4
             END,
-            cd.max_points DESC
+            cd.max_score DESC
     " 2>/dev/null)
 
     if [[ -z "$checks" || "$checks" == "[]" ]]; then

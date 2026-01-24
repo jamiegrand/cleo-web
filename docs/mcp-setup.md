@@ -7,8 +7,8 @@ cleo-web requires MCP (Model Context Protocol) servers for SEO functionality. Th
 | MCP | Required | Purpose |
 |-----|----------|---------|
 | **gsc** | Yes | Google Search Console data (rankings, CTR, impressions) |
-| **dataforseo** | Yes | Keyword research, Lighthouse, backlinks, on-page analysis |
-| **scraperapi** | Yes | HTML fetching, header analysis, schema parsing |
+| **dataforseo** | Yes | Keyword research, Lighthouse, backlinks, competitor analysis, mobile CWV |
+| **scraperapi** | Yes | HTML fetching, header analysis, schema parsing, hreflang, social meta |
 | **playwright** | Optional | Visual testing, screenshots, mobile rendering |
 | **astro-docs** | When using Astro | Astro documentation search |
 | **astro-mcp** | When using Astro | Astro project integration |
@@ -117,11 +117,22 @@ Look for:
 - [x] dataforseo: Connected
 ```
 
+#### Usage in cleo-web
+
+DataForSEO is used for:
+- **Keyword research**: Search volume, keyword difficulty, SERP features
+- **Lighthouse audits**: Core Web Vitals (desktop and mobile)
+- **Backlink analysis**: Profile summary, referring domains, toxic links
+- **Competitor analysis**: Domain rank, keyword overlap, backlink gaps
+- **Mobile audits**: Mobile-specific Core Web Vitals (LCP, INP, CLS)
+- **On-page analysis**: Content parsing, heading structure
+
 #### Cost Considerations
 
 DataForSEO charges per API call. cleo-web caches data to minimize costs:
 - Keyword data cached for 7 days
 - SERP data cached for 24 hours
+- Competitor data cached for 24 hours
 - Batch operations to reduce call count
 
 ### ScraperAPI {#scraperapi}
@@ -176,6 +187,9 @@ ScraperAPI is used for:
 - **Security headers**: Check CSP, HSTS, X-Frame-Options, etc.
 - **HTML analysis**: Parse page content for E-E-A-T signals
 - **Header inspection**: Analyze HTTP response headers
+- **hreflang analysis**: Parse and validate international SEO tags
+- **Social meta parsing**: Extract Open Graph and Twitter Card tags
+- **Viewport meta**: Check mobile-specific meta tags
 
 #### Cost Considerations
 
@@ -326,6 +340,9 @@ DataForSEO has rate limits. If you hit them:
 
 Once MCPs are configured:
 1. Run `/start` to begin a session (includes automatic site health check)
-2. Run `/audit site` for comprehensive site-wide audit
+2. Run `/audit site` for comprehensive site-wide audit (105+ checks, 11 categories)
 3. Try `/seo wins` to find quick optimization opportunities
 4. Run `/audit content /path "keyword"` on a page
+5. Run `/audit mobile` to check mobile-specific issues
+6. Run `/budget set lcp 2500` to set performance budgets
+7. Run `/competitor add competitor.com` to track competitors

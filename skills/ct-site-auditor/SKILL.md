@@ -4,15 +4,22 @@ Comprehensive site-wide SEO, performance, and accessibility auditing skill based
 
 ## Overview
 
-This skill performs full website audits across 8 categories:
-1. Technical SEO
-2. Schema Markup
-3. E-E-A-T Signals
-4. On-Page SEO
-5. AI/LLM Optimization
-6. Performance
-7. Accessibility
-8. Security
+This skill performs full website audits across 11 categories with 105+ checks:
+
+**Core Categories:**
+1. Technical SEO (12 checks)
+2. Schema Markup (7 checks)
+3. E-E-A-T Signals (8 checks)
+4. On-Page SEO (20 checks, includes social meta)
+5. AI/LLM Optimization (5 checks)
+6. Performance (17 checks, includes budgets)
+7. Accessibility (8 checks)
+8. Security (8 checks)
+
+**Extended Categories:**
+9. Mobile (10 checks)
+10. International (8 checks)
+11. Competitor (8 checks, optional)
 
 ## Capabilities
 
@@ -34,8 +41,8 @@ This skill performs full website audits across 8 categories:
 
 ### MCP Requirements
 - `gsc` - Google Search Console data
-- `dataforseo` - Lighthouse, on-page analysis, backlinks
-- `scraperapi` - HTML fetching, header analysis
+- `dataforseo` - Lighthouse, on-page analysis, backlinks, competitor analysis, mobile CWV
+- `scraperapi` - HTML fetching, header analysis, hreflang parsing, social meta parsing
 
 ## Audit Modules
 
@@ -169,33 +176,95 @@ Uses:
 - Privacy policy exists
 - Cookie consent implemented
 
+### Module 9: Mobile
+**Checks:** MOBILE001-MOBILE010
+
+Uses:
+- `mcp__dataforseo__on_page_lighthouse` with mobile emulation
+- `mcp__scraperapi__scrape` for viewport meta parsing
+
+**Key Checks:**
+- Mobile LCP < 2.5s
+- Mobile INP < 200ms
+- Mobile CLS < 0.1
+- Viewport meta configured
+- Tap targets 48x48px+
+- Font sizes >= 16px
+- Content fits viewport
+- Mobile-first indexing ready
+- Mobile content parity
+- Mobile resources optimized
+
+### Module 10: International SEO
+**Checks:** INTL001-INTL008
+
+Uses:
+- `mcp__scraperapi__scrape` for hreflang parsing
+- Multi-URL validation for reciprocal links
+
+**Key Checks:**
+- hreflang tags present
+- x-default hreflang exists
+- hreflang reciprocal valid
+- Language codes valid (ISO)
+- HTML lang attribute set
+- Content-Language header
+- Geo-targeting consistent
+- Regional content localized
+
+### Module 11: Competitor Benchmarking
+**Checks:** COMP001-COMP008
+
+Uses:
+- `mcp__dataforseo__dataforseo_labs_google_domain_rank_overview`
+- `mcp__dataforseo__dataforseo_labs_google_domain_intersection`
+- `mcp__dataforseo__backlinks_competitors`
+
+**Key Checks:**
+- Domain authority comparison
+- Keyword overlap analysis
+- Keyword gap opportunities
+- Referring domains comparison
+- Backlink quality comparison
+- Link gap opportunities
+- Performance vs competitors
+- Content coverage analysis
+
+Requires competitors to be configured via `/competitor add <domain>`.
+
 ## Scoring System
 
 ### Category Weights
 ```
-Technical:     15%
-Schema:        10%
-E-E-A-T:       15%
-On-Page:       15%
-AI:            10%
-Performance:   15%
-Accessibility: 10%
-Security:      10%
+Technical:      12%
+Schema:          9%
+E-E-A-T:        12%
+On-Page:        12% (includes social meta)
+AI:              8%
+Performance:    12% (includes budgets)
+Accessibility:   9%
+Security:        8%
+Mobile:          8%
+International:   5%
+Competitor:      5% (optional)
 ─────────────────
-Total:        100%
+Total:         100%
 ```
 
 ### Score Calculation
 ```python
 overall_score = (
-    technical_score * 0.15 +
-    schema_score * 0.10 +
-    eeat_score * 0.15 +
-    onpage_score * 0.15 +
-    ai_score * 0.10 +
-    performance_score * 0.15 +
-    accessibility_score * 0.10 +
-    security_score * 0.10
+    technical_score * 0.12 +
+    schema_score * 0.09 +
+    eeat_score * 0.12 +
+    onpage_score * 0.12 +
+    ai_score * 0.08 +
+    performance_score * 0.12 +
+    accessibility_score * 0.09 +
+    security_score * 0.08 +
+    mobile_score * 0.08 +
+    international_score * 0.05 +
+    competitor_score * 0.05  # optional, re-weighted if skipped
 )
 ```
 
@@ -222,24 +291,42 @@ The following checks support automatic fixes:
 ## Data Storage
 
 ### Tables Used
-- `site_audits` - Overall audit results
-- `audit_checks` - Individual check results
+- `site_audits` - Overall audit results (11 category scores)
+- `audit_checks` - Individual check results (105+ checks)
+- `check_definitions` - Check metadata and severity
 - `lighthouse_snapshots` - Performance history
 - `backlink_snapshots` - Link profile history
 - `schema_validations` - Schema validation results
 - `security_headers` - Security header checks
+- `mobile_audits` - Mobile-specific results
+- `hreflang_analysis` - International SEO data
+- `social_meta_analysis` - Open Graph/Twitter Card data
+- `performance_budgets` - Budget thresholds
+- `budget_compliance` - Budget compliance history
+- `competitors` - Tracked competitors
+- `competitor_snapshots` - Competitor comparison data
 
 ### Views Used
 - `latest_site_audit` - Most recent audit with trend
 - `site_audit_trends` - Historical score changes
 - `failing_checks_summary` - Current failing checks
 - `category_scores` - Latest category breakdown
+- `budget_status` - Current budget compliance
+- `competitor_summary` - Latest competitor metrics
 
 ## Task Integration
 
 ### Auto-Created Tasks
 
-For critical and high severity issues:
+**ALL audit issues** automatically create tasks, regardless of severity:
+
+| Audit Severity | Task Priority |
+|----------------|---------------|
+| Critical | critical |
+| High | high |
+| Medium | medium |
+| Low | low |
+
 ```json
 {
   "content": "Add Organization schema to site layout",
@@ -249,12 +336,16 @@ For critical and high severity issues:
   "labels": ["audit", "schema"],
   "source": "audit-site",
   "audit": {
-    "check_code": "SCHEMA001",
+    "checkCode": "SCHEMA001",
     "category": "schema",
-    "impact": "+15 points"
+    "severity": "critical",
+    "impact": "+15 points",
+    "fixSuggestion": "Add Organization JSON-LD to site layout"
   }
 }
 ```
+
+This ensures full visibility of all issues. Tasks can be filtered by priority when viewing.
 
 ### Task Linking
 - `audit_checks.cleo_task_id` links check to task

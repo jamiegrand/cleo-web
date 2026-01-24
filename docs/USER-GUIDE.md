@@ -9,12 +9,15 @@ Complete guide to using cleo-web for task management and SEO workflows.
 3. [Task Management](#task-management)
 4. [SEO Commands](#seo-commands)
 5. [Site Auditing](#site-auditing)
-6. [Content Auditing](#content-auditing)
-7. [Configuration](#configuration)
-8. [Multi-Agent Support](#multi-agent-support)
-9. [Data Storage](#data-storage)
-10. [Workflows](#workflows)
-11. [Troubleshooting](#troubleshooting)
+6. [Specialized Audits](#specialized-audits)
+7. [Content Auditing](#content-auditing)
+8. [Performance Budgets](#performance-budgets)
+9. [Competitor Tracking](#competitor-tracking)
+10. [Configuration](#configuration)
+11. [Multi-Agent Support](#multi-agent-support)
+12. [Data Storage](#data-storage)
+13. [Workflows](#workflows)
+14. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -75,7 +78,7 @@ This command:
 1. Verifies MCP servers are available (gsc, dataforseo, scraperapi)
 2. Detects your framework and loads the adapter
 3. Runs automatic site health check (if last audit > 24h old)
-4. Creates tasks for critical/high severity issues
+4. Creates tasks for ALL audit issues (critical, high, medium, low)
 5. Loads existing tasks and metrics
 6. Generates prioritized work list
 
@@ -96,11 +99,12 @@ Category Scores:
   Technical SEO      85/100  █████████░
   Schema Markup      45/100  █████░░░░░  ⚠ Issues
   Performance        91/100  █████████░  ✓ Excellent
-  Security           88/100  █████████░
+  Mobile             62/100  ██████░░░░  ⚠ Issues
+  International      90/100  █████████░
 
 ⚠ 2 Critical Issues:
   • Missing Organization schema (site-wide)
-  • No author bios on blog posts (12 pages)
+  • Mobile LCP > 2.5s on homepage
 
 Run /audit site for full report
 ────────────────────────────────────────────────────────────────
@@ -113,7 +117,7 @@ TODAY'S PRIORITIES:
 4. [Task] T003: Optimize homepage LCP - hero image
 
 Commands:
-  /audit site       Full site audit (8 categories, 60+ checks)
+  /audit site       Full site audit (11 categories, 105+ checks)
   /audit content    Audit single page with keyword
   /seo wins         Quick win opportunities
   /task list        View all tasks
@@ -126,8 +130,11 @@ Commands:
 | `/start` | Begin session with site health check |
 | `/task add "title"` | Create a task |
 | `/task list` | Show all tasks |
-| `/audit site` | Full site-wide audit (60+ checks) |
+| `/audit site` | Full site-wide audit (105+ checks) |
 | `/audit content /path "keyword"` | Single page SEO audit |
+| `/audit mobile [url]` | Mobile-specific audit |
+| `/budget set <metric> <value>` | Set performance budget |
+| `/competitor add <domain>` | Track competitor |
 | `/seo wins` | Find quick opportunities |
 
 ---
@@ -357,7 +364,7 @@ Questions (PAA):
 
 ## Site Auditing
 
-Site-wide audits analyze your entire website across 8 categories with 60+ checks based on the comprehensive Website Audit Checklist.
+Site-wide audits analyze your entire website across 11 categories with 105+ checks based on the comprehensive Website Audit Checklist.
 
 ### Full Site Audit
 
@@ -372,28 +379,33 @@ Run a comprehensive audit covering all categories:
 SITE AUDIT: example.com
 ════════════════════════════════════════════════════════════════
 
-OVERALL SCORE: 72/100 (Fair) ↑3 from last audit
+OVERALL SCORE: 68/100 (Fair) ↑3 from last audit
 
 Category Scores:
   Technical SEO      85/100  █████████░
   Schema Markup      45/100  █████░░░░░  ⚠ Issues
   E-E-A-T            68/100  ███████░░░
-  On-Page SEO        78/100  ████████░░
+  On-Page SEO        72/100  ███████░░░  (includes social meta)
   AI Optimization    52/100  █████░░░░░  ⚠ Issues
-  Performance        91/100  █████████░  ✓ Excellent
+  Performance        78/100  ████████░░  (includes budgets)
   Accessibility      75/100  ████████░░
   Security           88/100  █████████░
+  Mobile             62/100  ██████░░░░  ⚠ Issues
+  International      90/100  █████████░
 
-CRITICAL ISSUES (2):
+CRITICAL ISSUES (4):
+• [MOBILE001] Mobile LCP > 2.5s on homepage (3.2s) [-15 pts]
+• [MOBILE004] Missing viewport meta on 3 pages [-10 pts]
+• [INTL003] hreflang reciprocal links broken (5 pages) [-15 pts]
 • Missing Organization schema (site-wide) [-15 pts]
-• No author bios on blog posts (12 pages) [-12 pts]
 
-HIGH ISSUES (3):
-• LCP > 2.5s on homepage [-8 pts]
-• Missing FAQ schema on /faq [-5 pts]
-• 3 pages missing meta descriptions [-6 pts]
+HIGH ISSUES (6):
+• [MOBILE005] Tap targets too small on /contact [-10 pts]
+• [ONPAGE013] Missing og:image on blog posts (8 pages) [-8 pts]
+• LCP budget exceeded (2800ms > 2500ms budget) [-10 pts]
+...
 
-TASKS CREATED: 5
+TASKS CREATED: 10 (all severities)
 
 Run /audit site --full for detailed report
 Run /task list to see all tasks
@@ -401,7 +413,7 @@ Run /task list to see all tasks
 
 ### Full Mode
 
-Get detailed results for all 60+ checks:
+Get detailed results for all 105+ checks:
 
 ```
 /audit site --full
@@ -460,17 +472,19 @@ Audit a specific category only:
 
 **Available categories:**
 
-| Category | Checks |
-|----------|--------|
-| `technical` | robots.txt, sitemap, HTTPS, redirects, crawlability |
-| `schema` | Organization, WebSite, Article, FAQ, validation |
-| `eeat` | Author, About, Contact, Dates, Citations |
-| `onpage` | Titles, Metas, Headings, Images, URLs, Links |
-| `ai` | LLM optimization, quotable sections, FAQ format |
-| `performance` | Core Web Vitals, load time, asset optimization |
-| `accessibility` | WCAG 2.1 AA, keyboard, ARIA, contrast |
-| `security` | Headers, SSL, legal compliance |
-| `backlinks` | Profile analysis, toxic links, diversity |
+| Category | Weight | Checks |
+|----------|--------|--------|
+| `technical` | 12% | robots.txt, sitemap, HTTPS, redirects, crawlability |
+| `schema` | 9% | Organization, WebSite, Article, FAQ, validation |
+| `eeat` | 12% | Author, About, Contact, Dates, Citations |
+| `onpage` | 12% | Titles, Metas, Headings, Images, URLs, Links, Social meta |
+| `ai` | 8% | LLM optimization, quotable sections, FAQ format |
+| `performance` | 12% | Core Web Vitals, load time, asset optimization, budgets |
+| `accessibility` | 9% | WCAG 2.1 AA, keyboard, ARIA, contrast |
+| `security` | 8% | Headers, SSL, legal compliance |
+| `mobile` | 8% | Mobile CWV, viewport, tap targets, font size |
+| `international` | 5% | hreflang, x-default, lang attribute, geo-targeting |
+| `competitor` | 5% | Domain rank, keyword overlap, backlink comparison |
 
 ### Auto-Fix Mode
 
@@ -517,16 +531,19 @@ Re-run /audit site to verify fixes
 
 **Category Weights:**
 
-| Category | Weight |
-|----------|--------|
-| Technical SEO | 15% |
-| Schema Markup | 10% |
-| E-E-A-T Signals | 15% |
-| On-Page SEO | 15% |
-| AI Optimization | 10% |
-| Performance | 15% |
-| Accessibility | 10% |
-| Security | 10% |
+| Category | Weight | Checks |
+|----------|--------|--------|
+| Technical SEO | 12% | 12 |
+| Schema Markup | 9% | 7 |
+| E-E-A-T Signals | 12% | 8 |
+| On-Page SEO | 12% | 20 (includes social meta) |
+| AI Optimization | 8% | 5 |
+| Performance | 12% | 17 (includes budgets) |
+| Accessibility | 9% | 8 |
+| Security | 8% | 8 |
+| Mobile | 8% | 10 |
+| International | 5% | 8 |
+| Competitor | 5% | 8 (optional) |
 
 **Score Interpretation:**
 
@@ -540,7 +557,14 @@ Re-run /audit site to verify fixes
 
 ### Auto-Created Tasks
 
-Issues with severity `critical` or `high` automatically create tasks:
+**ALL audit issues** automatically create tasks, regardless of severity:
+
+| Audit Severity | Task Priority |
+|----------------|---------------|
+| Critical | critical |
+| High | high |
+| Medium | medium |
+| Low | low |
 
 ```json
 {
@@ -554,12 +578,22 @@ Issues with severity `critical` or `high` automatically create tasks:
   "audit": {
     "checkCode": "SCHEMA001",
     "category": "schema",
-    "impact": "+15 points"
+    "severity": "critical",
+    "impact": "+15 points",
+    "fixSuggestion": "Add Organization JSON-LD to site layout"
   }
 }
 ```
 
-Tasks are not duplicated - if a task already exists for a check code, it won't be recreated.
+Tasks are not duplicated - if a task already exists for a check code, it won't be recreated. Tasks can be filtered by priority when viewing with `/task list`.
+
+### Skip Categories
+
+Skip specific categories to speed up audits:
+
+```
+/audit site --skip=mobile,competitor
+```
 
 ### Integration with /start
 
@@ -568,6 +602,173 @@ Site audits run automatically at `/start` when:
 - This is the first session
 
 Quick mode runs (~30 seconds) covering critical checks only. The site health summary appears in the session output.
+
+---
+
+## Specialized Audits
+
+In addition to the full site audit, cleo-web provides focused audit commands for specific areas.
+
+### Mobile Audit
+
+Run mobile-specific checks:
+
+```
+/audit mobile [url]
+```
+
+**Output:**
+```
+MOBILE AUDIT: example.com
+────────────────────────────────────────
+
+Mobile Performance: 62/100
+
+Core Web Vitals (Mobile):
+  LCP: 3.2s  ✗ Poor (> 2.5s)
+  INP: 180ms ✓ Good (< 200ms)
+  CLS: 0.08  ✓ Good (< 0.1)
+
+Mobile-Specific Checks:
+  ✓ Viewport meta configured
+  ✗ Tap targets too small (3 issues)
+  ✓ Font sizes legible
+  ✓ Content fits viewport
+  ✗ Mobile-first not ready
+
+Issues:
+• [CRITICAL] LCP > 2.5s - optimize hero image
+• [HIGH] Tap targets on /contact too small
+
+Tasks Created: 2
+```
+
+**Checks include:**
+- Mobile Core Web Vitals (LCP, INP, CLS)
+- Viewport meta tag configuration
+- Tap target sizing (48x48px minimum)
+- Font size legibility (>=16px)
+- Content width fits viewport
+- Mobile-first indexing readiness
+- Content parity with desktop
+
+### International SEO Audit
+
+Check multi-language/region setup:
+
+```
+/audit international
+```
+
+**Output:**
+```
+INTERNATIONAL SEO AUDIT: example.com
+────────────────────────────────────────
+
+International Score: 75/100
+
+hreflang Analysis:
+  Pages with hreflang: 45/50
+  x-default defined: Yes
+  Reciprocal valid: 40/45 (5 broken)
+
+Language Setup:
+  ✓ HTML lang attribute set
+  ⚠ Content-Language header missing
+  ✓ Geo-targeting: subdirectory (/en/, /de/, /fr/)
+
+Issues:
+• [CRITICAL] 5 pages have broken reciprocal hreflang
+• [HIGH] Missing hreflang on 5 pages
+• [MEDIUM] Content-Language header not set
+
+Tasks Created: 3
+```
+
+**Checks include:**
+- hreflang tags present and valid
+- x-default hreflang defined
+- Reciprocal links validated
+- HTML lang attribute set
+- Content-Language header consistent
+- Geo-targeting strategy (ccTLD, subdirectory, subdomain)
+
+### Social Meta Audit
+
+Validate social sharing setup:
+
+```
+/audit social [url]
+```
+
+**Output:**
+```
+SOCIAL META AUDIT: /blog/my-post
+────────────────────────────────────────
+
+Open Graph Score: 80/100
+Twitter Card Score: 70/100
+
+Open Graph:
+  ✓ og:title present
+  ✓ og:description present
+  ✓ og:image present (1200x630)
+  ✓ og:url matches canonical
+  ✗ og:type missing
+
+Twitter Card:
+  ✓ twitter:card (summary_large_image)
+  ✗ twitter:title missing
+  ✗ twitter:description missing
+  ✓ twitter:image valid
+
+Issues:
+• [HIGH] Missing og:type tag
+• [MEDIUM] Missing twitter:title/description
+
+Tasks Created: 2
+```
+
+**Checks include:**
+- Open Graph tags (og:title, og:description, og:image, og:url, og:type)
+- Twitter Card tags (twitter:card, twitter:title, twitter:image)
+- Image dimension validation (1200x630px for OG)
+- Canonical URL consistency
+
+### Competitor Audit
+
+Compare against tracked competitors:
+
+```
+/audit competitors
+```
+
+**Output:**
+```
+COMPETITOR ANALYSIS: example.com
+────────────────────────────────────────
+
+Your Domain Rank: 45
+
+Competitor Comparison:
+  competitor-a.com  Rank: 52  Keywords: 1,234  Overlap: 45%
+  competitor-b.com  Rank: 38  Keywords: 892   Overlap: 32%
+  industry-leader.com  Rank: 78  Keywords: 5,678  Overlap: 28%
+
+Keyword Gaps (they rank, you don't):
+  • "keyword phrase 1" - competitor-a.com ranks #3
+  • "keyword phrase 2" - competitor-b.com ranks #5
+  • "keyword phrase 3" - industry-leader.com ranks #1
+
+Backlink Opportunities:
+  • 45 domains link to competitors but not you
+  • Top opportunity: techblog.com (DA 65)
+
+Performance:
+  Your LCP: 2.1s  vs  Avg competitor: 2.4s ✓ Better
+```
+
+Requires competitors to be configured via `/competitor add <domain>`. See [Competitor Tracking](#competitor-tracking).
 
 ---
 
@@ -745,6 +946,181 @@ Tasks Created: 6 (for issues marked HIGH priority)
 
 ---
 
+## Performance Budgets
+
+Set and track performance budget thresholds to ensure your site meets targets.
+
+### Set a Budget
+
+```
+/budget set <metric> <threshold>
+```
+
+**Examples:**
+```
+/budget set lcp 2500        # LCP must be < 2500ms
+/budget set fcp 1800        # FCP must be < 1800ms
+/budget set ttfb 600        # TTFB must be < 600ms
+/budget set page_size 500   # Total page size < 500KB
+/budget set js_size 200     # JavaScript bundle < 200KB
+/budget set css_size 50     # CSS < 50KB
+/budget set image_size 300  # Images < 300KB per page
+/budget set requests 50     # HTTP requests < 50
+/budget set third_party 5   # Third-party scripts < 5
+```
+
+### List Budgets
+
+```
+/budget list
+```
+
+**Output:**
+```
+PERFORMANCE BUDGETS
+────────────────────────────────────────
+
+Active Budgets:
+  lcp         < 2500ms   ✓ Compliant (2100ms)
+  fcp         < 1800ms   ✓ Compliant (1200ms)
+  ttfb        < 600ms    ✗ Exceeded (780ms, +30%)
+  page_size   < 500KB    ✓ Compliant (420KB)
+  requests    < 50       ⚠ Warning (48)
+
+Last checked: 2 hours ago
+
+Run /audit site to refresh
+```
+
+### Clear a Budget
+
+```
+/budget clear ttfb           # Remove single budget
+/budget clear all            # Remove all budgets
+```
+
+### Available Metrics
+
+| Metric | Type | Unit | Default Severity |
+|--------|------|------|------------------|
+| `lcp` | time | ms | critical |
+| `fcp` | time | ms | high |
+| `ttfb` | time | ms | high |
+| `page_size` | resource | KB | medium |
+| `js_size` | resource | KB | medium |
+| `css_size` | resource | KB | low |
+| `image_size` | resource | KB | medium |
+| `requests` | quantity | count | medium |
+| `third_party` | quantity | count | high |
+
+### Integration with Audits
+
+Performance budgets are checked during:
+- `/audit site` - Full site audit includes budget checks (PERF009-PERF017)
+- `/start` - Session start shows budget compliance summary
+
+Budget violations create tasks with configured severity.
+
+---
+
+## Competitor Tracking
+
+Track and benchmark against competitors.
+
+### Add a Competitor
+
+```
+/competitor add <domain> [--type=TYPE] [--name=NAME]
+```
+
+**Examples:**
+```
+/competitor add competitor.com
+/competitor add competitor.com --type=direct
+/competitor add industry-leader.com --type=aspirational --name="Industry Leader"
+```
+
+**Competitor types:**
+- `direct` - Direct competitors in your market
+- `indirect` - Indirect/adjacent competitors
+- `aspirational` - Industry leaders to benchmark against
+
+### List Competitors
+
+```
+/competitor list
+```
+
+**Output:**
+```
+TRACKED COMPETITORS
+────────────────────────────────────────
+
+Direct:
+  competitor-a.com     Rank: 52   Last checked: 2h ago
+  competitor-b.com     Rank: 38   Last checked: 2h ago
+
+Aspirational:
+  industry-leader.com  Rank: 78   Last checked: 2h ago
+
+Your domain rank: 45
+
+Run /audit competitors for full analysis
+```
+
+### Remove a Competitor
+
+```
+/competitor remove competitor.com
+```
+
+### Analyze Competitors
+
+```
+/competitor analyze [domain]
+```
+
+Deep dive into a specific competitor or all tracked competitors:
+
+**Output:**
+```
+COMPETITOR DEEP DIVE: competitor-a.com
+────────────────────────────────────────
+
+Domain Metrics:
+  Domain Rank: 52 (vs your 45)
+  Organic Keywords: 1,234
+  Estimated Traffic: 25,000/mo
+
+Keyword Analysis:
+  Overlap: 456 keywords (37%)
+  They rank better: 234 keywords
+  You rank better: 189 keywords
+
+Top Keyword Gaps:
+  "keyword phrase 1"     Vol: 5,400   They: #3   You: not ranking
+  "keyword phrase 2"     Vol: 3,200   They: #5   You: #42
+  "keyword phrase 3"     Vol: 2,800   They: #8   You: not ranking
+
+Backlink Comparison:
+  Their backlinks: 1,245
+  Your backlinks: 890
+  Link gap domains: 156
+
+Top Link Opportunities:
+  techblog.com (DA 65) - links to competitor
+  devnews.io (DA 58) - links to competitor
+```
+
+### MCP Requirements
+
+Competitor tracking uses:
+- `mcp__dataforseo__dataforseo_labs_google_domain_rank_overview` - Domain metrics
+- `mcp__dataforseo__dataforseo_labs_google_domain_intersection` - Keyword overlap
+- `mcp__dataforseo__backlinks_competitors` - Backlink comparison
+
+---
+
 ## Configuration
 
 ### Configuration File
@@ -842,13 +1218,20 @@ Time-series metrics stored in `.cleo-web/metrics.db`:
 
 | Table | Purpose |
 |-------|---------|
-| `site_audits` | Site-wide audit results and scores |
-| `audit_checks` | Individual check results (60+ checks) |
+| `site_audits` | Site-wide audit results (11 category scores) |
+| `audit_checks` | Individual check results (105+ checks) |
 | `check_definitions` | Check metadata and severity |
 | `lighthouse_snapshots` | Core Web Vitals over time |
 | `backlink_snapshots` | Backlink profile history |
 | `schema_validations` | JSON-LD validation results |
 | `security_headers` | Security header checks |
+| `mobile_audits` | Mobile-specific audit results |
+| `hreflang_analysis` | International SEO data |
+| `social_meta_analysis` | Open Graph/Twitter Card data |
+| `performance_budgets` | Budget thresholds |
+| `budget_compliance` | Budget compliance history |
+| `competitors` | Tracked competitors |
+| `competitor_snapshots` | Competitor comparison data |
 | `audits` | Page-level audit history |
 | `audit_issues` | Individual page issues found |
 | `keywords` | Keyword data cache (7-day TTL) |
@@ -864,6 +1247,8 @@ Time-series metrics stored in `.cleo-web/metrics.db`:
 | `failing_checks_summary` | All failing checks grouped by severity |
 | `cwv_history` | Core Web Vitals trends |
 | `category_scores` | Scores by category over time |
+| `budget_status` | Current budget compliance |
+| `competitor_summary` | Latest competitor metrics |
 
 ### Backups
 
@@ -885,7 +1270,7 @@ Automatic backups created before every write:
 
 2. **Review site health** - Check for critical issues
    - Site health score shown in session summary
-   - Critical/high issues auto-create tasks
+   - All issues auto-create tasks (critical, high, medium, low)
 
 3. **Address critical issues first**
    ```
@@ -925,7 +1310,7 @@ Automatic backups created before every write:
    ```
 
 5. **Create tasks for manual fixes**
-   - Critical/high issues auto-create tasks
+   - All issues auto-create tasks (sorted by priority)
    - Review `/task list` for audit-generated tasks
 
 6. **Re-audit to verify improvements**
@@ -949,7 +1334,7 @@ Automatic backups created before every write:
    ```
 
 4. **Create tasks for issues**
-   (High-priority issues auto-create tasks)
+   (All issues auto-create tasks)
 
 5. **Track fixes**
    ```
@@ -1071,9 +1456,18 @@ apt-get install util-linux
 | Command | Description |
 |---------|-------------|
 | `/audit site` | Quick site audit (critical checks) |
-| `/audit site --full` | Full site audit (60+ checks) |
+| `/audit site --full` | Full site audit (105+ checks) |
 | `/audit site --category=NAME` | Audit specific category |
+| `/audit site --skip=mobile,competitor` | Skip specific categories |
 | `/audit site --fix` | Auto-fix supported issues |
+
+### Specialized Audit Commands
+| Command | Description |
+|---------|-------------|
+| `/audit mobile [url]` | Mobile-specific audit |
+| `/audit international` | hreflang and geo-targeting audit |
+| `/audit social [url]` | Open Graph and Twitter Card audit |
+| `/audit competitors` | Competitor benchmarking |
 
 ### Content Audit Commands
 | Command | Description |
@@ -1082,3 +1476,19 @@ apt-get install util-linux
 | `/audit quick /path` | 10-point page check |
 | `/audit eeat /path` | E-E-A-T deep dive |
 | `/audit batch collection --limit N` | Batch audit pages |
+
+### Budget Commands
+| Command | Description |
+|---------|-------------|
+| `/budget set <metric> <value>` | Set performance budget |
+| `/budget list` | Show all budgets with compliance |
+| `/budget clear <metric>` | Remove a budget |
+| `/budget clear all` | Remove all budgets |
+
+### Competitor Commands
+| Command | Description |
+|---------|-------------|
+| `/competitor add <domain>` | Add competitor to track |
+| `/competitor list` | Show tracked competitors |
+| `/competitor remove <domain>` | Stop tracking competitor |
+| `/competitor analyze [domain]` | Deep competitive analysis |

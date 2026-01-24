@@ -183,7 +183,7 @@ mkdir -p ".claude/skills"
 # Copy skill definitions from cleo-web
 if [[ -d "$SCRIPT_DIR/.claude/skills" ]]; then
     cp -r "$SCRIPT_DIR/.claude/skills/"* ".claude/skills/" 2>/dev/null || true
-    echo -e "  ${GREEN}✓${NC} Installed skills: /start, /audit, /seo, /task, /session"
+    echo -e "  ${GREEN}✓${NC} Installed skills: /start, /audit, /seo, /task, /session, /budget, /competitor"
 else
     echo -e "  ${YELLOW}⚠${NC} Skills directory not found in cleo-web"
 fi

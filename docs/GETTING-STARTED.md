@@ -240,6 +240,10 @@ chmod +x ~/tools/cleo-web/install.sh
 | `/task add "title"` | Create task |
 | `/task list` | View tasks |
 | `/task complete ID` | Complete task |
-| `/audit content /path "keyword"` | Full SEO audit |
+| `/audit site` | Full site audit (105+ checks, 11 categories) |
+| `/audit content /path "keyword"` | Full page SEO audit |
+| `/audit mobile [url]` | Mobile-specific audit |
+| `/budget set <metric> <value>` | Set performance budget |
+| `/competitor add <domain>` | Track competitor |
 | `/seo wins` | Quick opportunities |
 | `/seo keywords "topic"` | Keyword research |
