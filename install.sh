@@ -172,6 +172,23 @@ fi
 echo ""
 
 # ============================================================================
+# INSTALL CLAUDE CODE SKILLS
+# ============================================================================
+
+echo "Installing Claude Code skills..."
+
+# Create .claude/skills directory
+mkdir -p ".claude/skills"
+
+# Copy skill definitions from cleo-web
+if [[ -d "$SCRIPT_DIR/.claude/skills" ]]; then
+    cp -r "$SCRIPT_DIR/.claude/skills/"* ".claude/skills/" 2>/dev/null || true
+    echo -e "  ${GREEN}✓${NC} Installed skills: /start, /audit, /seo, /task, /session"
+else
+    echo -e "  ${YELLOW}⚠${NC} Skills directory not found in cleo-web"
+fi
+
+# ============================================================================
 # CLAUDE.MD INJECTION
 # ============================================================================
 
@@ -179,7 +196,7 @@ echo "Configuring Claude Code..."
 
 CLAUDE_MD="CLAUDE.md"
 
-# Generate CLAUDE.md content (embedded to avoid path issues with spaces)
+# Generate minimal CLAUDE.md (skills handle command details)
 generate_claude_md() {
     cat << 'CLAUDEMD'
 # Project Configuration
@@ -188,76 +205,27 @@ This project uses **cleo-web** for task management and SEO workflows.
 
 ## Available Commands
 
-### Session Management
-- `/start` - Begin cleo-web session with MCP verification and site health check
-- `/session pause` - Pause current session
-- `/session resume` - Resume paused session
-- `/session end` - End session with summary
-- `/session status` - Show current session status
+Type `/` to see all available commands with autocomplete:
 
-### Task Management
-- `/task add "title"` - Create a task
-- `/task list` - List all tasks
-- `/task complete ID` - Mark task as done
-
-### SEO Analysis (Requires MCPs)
-- `/seo wins` - Quick win opportunities from GSC
-- `/seo gaps` - Content gap analysis
-- `/seo roi` - Performance analysis
-- `/seo refresh` - Find declining pages
-
-### Site Auditing
-- `/audit site` - Full site audit (60+ checks, 8 categories)
-- `/audit site --category=performance` - Category-specific audit
-- `/audit content /path` - Single page content audit
-- `/audit quick /path` - 10-point quick check
-
-## /start Command
-
-When you run `/start`, execute these steps:
-
-### Step 1: Verify MCP Availability
-Check that required MCP servers are responding:
-- **gsc** (required) - Google Search Console data
-- **dataforseo** (required) - Keyword research, Lighthouse, backlinks
-- **scraperapi** (required) - HTML fetching, header analysis
-
-Use ToolSearch to verify each MCP is available before proceeding.
-
-### Step 2: Check Configuration
-Read `.cleo-web/config.json` for site settings:
-- `siteUrl` - The site URL for GSC queries
-- `framework` - Detected framework (astro, nextjs, nuxt, generic)
-
-### Step 3: Load Tasks
-Read `.cleo-web/todo.json` for current tasks.
-
-### Step 4: Display Session Summary
-Show:
-- MCP status (connected/missing)
-- Site health score (if available from last audit)
-- Active tasks count
-- Quick win opportunities
-
-### Step 5: Offer Priorities
-Suggest what to work on based on:
-1. Critical site audit issues
-2. Quick wins from GSC (position 4-15 pages)
-3. Active tasks
+- `/start` - Begin session with MCP verification
+- `/audit` - Site-wide or content SEO audits
+- `/seo` - Quick wins, gaps, ROI analysis
+- `/task` - Task management (add, list, complete)
+- `/session` - Session lifecycle (pause, resume, end)
 
 ## Data Storage
 
 All data stored in `.cleo-web/`:
 - `todo.json` - Task state
 - `config.json` - Configuration
-- `metrics.db` - SQLite database for audit history, keywords, GSC data
+- `metrics.db` - Audit history, keywords, GSC data
 
-## MCP Setup
+## Required MCPs
 
-If MCPs are missing, guide user to setup:
-- GSC: Configure OAuth credentials for Google Search Console
-- DataForSEO: Set DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD
-- ScraperAPI: Set SCRAPERAPI_KEY
+These MCPs must be configured (globally or per-project):
+- **gsc** - Google Search Console
+- **dataforseo** - Keyword research, Lighthouse
+- **scraperapi** - HTML fetching, headers
 CLAUDEMD
 }
 
