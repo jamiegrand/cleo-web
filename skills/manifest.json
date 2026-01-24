@@ -1,0 +1,118 @@
+{
+  "$schema": "https://cleo-web.dev/schemas/v1/skills-manifest.schema.json",
+  "_meta": {
+    "schemaVersion": "1.0.0",
+    "lastUpdated": "2026-01-24",
+    "totalSkills": 7
+  },
+  "skills": [
+    {
+      "name": "ct-session-manager",
+      "version": "1.0.0",
+      "description": "Session lifecycle management for tracking work across multiple days with context persistence, time tracking, and historical session browsing.",
+      "path": "skills/ct-session-manager",
+      "tags": ["session", "context", "tracking", "core"],
+      "status": "active",
+      "capabilities": {
+        "inputs": ["SESSION_ID", "SESSION_ACTION", "NOTE"],
+        "outputs": ["session-status", "session-summary", "session-history"],
+        "dependencies": ["ct-task-manager", "ct-metrics-store"],
+        "dispatch_triggers": ["start session", "pause session", "resume session", "end session", "session status", "session history"],
+        "compatible_subagent_types": ["general-purpose"]
+      }
+    },
+    {
+      "name": "ct-task-manager",
+      "version": "1.0.0",
+      "description": "Core task management skill for CRUD operations. Handles task creation, updates, completion, and listing with hierarchy support.",
+      "path": "skills/ct-task-manager",
+      "tags": ["task-management", "core"],
+      "status": "active",
+      "capabilities": {
+        "inputs": ["TASK_ID", "TASK_TITLE", "TASK_DESCRIPTION", "EPIC_ID"],
+        "outputs": ["task", "task-list", "manifest-entry"],
+        "dependencies": [],
+        "dispatch_triggers": ["create task", "add task", "list tasks", "complete task", "update task", "show task"],
+        "compatible_subagent_types": ["general-purpose"]
+      }
+    },
+    {
+      "name": "ct-seo-auditor",
+      "version": "1.0.0",
+      "description": "Content SEO auditing with 0-100 scoring across 6 categories. Framework-agnostic auditing for any web page.",
+      "path": "skills/ct-seo-auditor",
+      "tags": ["seo", "auditing", "content"],
+      "status": "active",
+      "capabilities": {
+        "inputs": ["PAGE_PATH", "PAGE_URL", "TARGET_KEYWORD"],
+        "outputs": ["audit-report", "audit-score", "recommendations"],
+        "dependencies": ["ct-metrics-store"],
+        "dispatch_triggers": ["audit content", "seo audit", "check seo", "content score", "eeat analysis", "quick audit"],
+        "compatible_subagent_types": ["general-purpose", "Explore"]
+      }
+    },
+    {
+      "name": "ct-site-auditor",
+      "version": "1.0.0",
+      "description": "Comprehensive site-wide audit covering Technical SEO, Schema, E-E-A-T, On-Page, AI Optimization, Performance, Accessibility, and Security based on 25-section Website Audit Checklist.",
+      "path": "skills/ct-site-auditor",
+      "tags": ["seo", "auditing", "site-wide", "lighthouse", "backlinks"],
+      "status": "active",
+      "capabilities": {
+        "inputs": ["SITE_URL", "AUDIT_TYPE", "CATEGORY"],
+        "outputs": ["site-audit-report", "category-scores", "issue-list", "tasks"],
+        "dependencies": ["ct-metrics-store", "ct-task-manager"],
+        "dispatch_triggers": ["audit site", "site audit", "full audit", "technical audit", "schema audit", "performance audit", "accessibility audit", "security audit", "backlink audit"],
+        "compatible_subagent_types": ["general-purpose", "Explore"],
+        "requires_mcp": ["gsc", "dataforseo", "scraperapi"]
+      }
+    },
+    {
+      "name": "ct-gsc-analyst",
+      "version": "1.0.0",
+      "description": "Google Search Console analysis for SEO opportunities. Identifies quick wins, content gaps, and ranking trends.",
+      "path": "skills/ct-gsc-analyst",
+      "tags": ["seo", "analytics", "gsc"],
+      "status": "active",
+      "capabilities": {
+        "inputs": ["SITE_URL", "DATE_RANGE", "PAGE_PATH"],
+        "outputs": ["opportunity-report", "ranking-data", "trend-analysis"],
+        "dependencies": ["ct-metrics-store"],
+        "dispatch_triggers": ["seo wins", "quick wins", "ranking opportunities", "content gaps", "seo roi", "declining pages"],
+        "compatible_subagent_types": ["general-purpose", "Explore"],
+        "requires_mcp": ["gsc"]
+      }
+    },
+    {
+      "name": "ct-content-strategist",
+      "version": "1.0.0",
+      "description": "Keyword research and content strategy. Provides keyword data, topic clustering, and content recommendations.",
+      "path": "skills/ct-content-strategist",
+      "tags": ["seo", "keywords", "strategy"],
+      "status": "active",
+      "capabilities": {
+        "inputs": ["SEED_KEYWORD", "TOPIC", "COMPETITOR_URL"],
+        "outputs": ["keyword-report", "topic-clusters", "content-plan"],
+        "dependencies": ["ct-metrics-store"],
+        "dispatch_triggers": ["keyword research", "find keywords", "content strategy", "topic ideas", "paa questions"],
+        "compatible_subagent_types": ["general-purpose", "Explore"],
+        "requires_mcp": ["dataforseo"]
+      }
+    },
+    {
+      "name": "ct-metrics-store",
+      "version": "1.0.0",
+      "description": "SQLite-based metrics storage for SEO time-series data. Provides audit history, keyword caching, and trend analysis.",
+      "path": "skills/ct-metrics-store",
+      "tags": ["data", "storage", "metrics"],
+      "status": "active",
+      "capabilities": {
+        "inputs": ["AUDIT_DATA", "KEYWORD_DATA", "GSC_DATA"],
+        "outputs": ["stored-data", "trend-data", "cache-status"],
+        "dependencies": [],
+        "dispatch_triggers": ["store audit", "cache keywords", "get history", "score trends"],
+        "compatible_subagent_types": ["general-purpose"]
+      }
+    }
+  ]
+}

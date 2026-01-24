@@ -1,0 +1,365 @@
+{
+  "name": "cleo-web",
+  "version": "0.1.0",
+  "description": "Task management + SEO workflows for web developers. Combines CLEO task tracking with framework-agnostic SEO auditing.",
+  "author": "Jamie Grand",
+  "license": "MIT",
+  "homepage": "https://github.com/jamiegrand/cleo-web",
+
+  "keywords": [
+    "task-management",
+    "seo",
+    "web-development",
+    "astro",
+    "next",
+    "nuxt",
+    "claude-code",
+    "mcp"
+  ],
+
+  "engines": {
+    "node": ">=18.0.0"
+  },
+
+  "install": {
+    "script": "install.sh",
+    "postInstall": "Run /start in Claude Code to begin"
+  },
+
+  "commands": [
+    {
+      "name": "start",
+      "description": "Begin session with MCP verification and data-driven priorities",
+      "file": "commands/start.md",
+      "category": "session"
+    },
+    {
+      "name": "status",
+      "description": "Show current project and session status",
+      "file": "commands/status.md",
+      "category": "session"
+    },
+    {
+      "name": "task",
+      "description": "Task management - add, list, complete, update",
+      "file": "commands/task.md",
+      "arguments": "[add|list|complete|update|show] [args]",
+      "category": "tasks",
+      "type": "router"
+    },
+    {
+      "name": "task-add",
+      "description": "Add a new task",
+      "file": "commands/task-add.md",
+      "arguments": "\"title\" [--epic ID] [--priority P]",
+      "category": "tasks",
+      "type": "implementation",
+      "parent": "task"
+    },
+    {
+      "name": "task-list",
+      "description": "List tasks with filters",
+      "file": "commands/task-list.md",
+      "arguments": "[--status S] [--epic ID] [--phase P]",
+      "category": "tasks",
+      "type": "implementation",
+      "parent": "task"
+    },
+    {
+      "name": "task-complete",
+      "description": "Mark task as complete",
+      "file": "commands/task-complete.md",
+      "arguments": "ID",
+      "category": "tasks",
+      "type": "implementation",
+      "parent": "task"
+    },
+    {
+      "name": "seo",
+      "description": "SEO tools - wins, gaps, roi, refresh, impact, keywords",
+      "file": "commands/seo.md",
+      "arguments": "[wins|gaps|roi|refresh|impact|keywords] [args]",
+      "category": "seo",
+      "type": "router"
+    },
+    {
+      "name": "seo-wins",
+      "description": "Find SEO quick wins from Search Console (positions 4-15)",
+      "file": "commands/seo-wins.md",
+      "category": "seo",
+      "type": "implementation",
+      "parent": "seo",
+      "requires": ["gsc"]
+    },
+    {
+      "name": "seo-gaps",
+      "description": "Find content opportunities from GSC data",
+      "file": "commands/seo-gaps.md",
+      "category": "seo",
+      "type": "implementation",
+      "parent": "seo",
+      "requires": ["gsc", "dataforseo"]
+    },
+    {
+      "name": "seo-roi",
+      "description": "Analyze content performance and ROI",
+      "file": "commands/seo-roi.md",
+      "category": "seo",
+      "type": "implementation",
+      "parent": "seo",
+      "requires": ["gsc"]
+    },
+    {
+      "name": "seo-refresh",
+      "description": "Find declining pages needing content refresh",
+      "file": "commands/seo-refresh.md",
+      "category": "seo",
+      "type": "implementation",
+      "parent": "seo",
+      "requires": ["gsc"]
+    },
+    {
+      "name": "seo-impact",
+      "description": "Measure before/after effect of SEO changes",
+      "file": "commands/seo-impact.md",
+      "arguments": "[page-path|issue-number]",
+      "category": "seo",
+      "type": "implementation",
+      "parent": "seo",
+      "requires": ["gsc"]
+    },
+    {
+      "name": "seo-keywords",
+      "description": "Manage cached keyword research data",
+      "file": "commands/seo-keywords.md",
+      "arguments": "[list|search|refresh|clear] [keyword]",
+      "category": "seo",
+      "type": "implementation",
+      "parent": "seo",
+      "requires": ["dataforseo"]
+    },
+    {
+      "name": "audit",
+      "description": "Content auditing - content, quick, eeat, batch",
+      "file": "commands/audit.md",
+      "arguments": "[content|quick|eeat|batch] [page] [keyword]",
+      "category": "quality",
+      "type": "router"
+    },
+    {
+      "name": "audit-content",
+      "description": "Full SEO content audit with 0-100 scoring",
+      "file": "commands/audit-content.md",
+      "arguments": "[page-path] [keyword]",
+      "category": "quality",
+      "type": "implementation",
+      "parent": "audit"
+    },
+    {
+      "name": "audit-quick",
+      "description": "10-point rapid content check",
+      "file": "commands/audit-quick.md",
+      "arguments": "[page-path]",
+      "category": "quality",
+      "type": "implementation",
+      "parent": "audit"
+    },
+    {
+      "name": "audit-eeat",
+      "description": "Deep E-E-A-T (Experience, Expertise, Authority, Trust) audit",
+      "file": "commands/audit-eeat.md",
+      "arguments": "[page-path]",
+      "category": "quality",
+      "type": "implementation",
+      "parent": "audit"
+    },
+    {
+      "name": "audit-batch",
+      "description": "Batch audit multiple pages",
+      "file": "commands/audit-batch.md",
+      "arguments": "[collection|pages] [--limit N]",
+      "category": "quality",
+      "type": "implementation",
+      "parent": "audit"
+    },
+    {
+      "name": "setup",
+      "description": "Setup and configuration tools",
+      "file": "commands/setup.md",
+      "arguments": "[verify|init|mcps]",
+      "category": "meta",
+      "type": "router"
+    },
+    {
+      "name": "help",
+      "description": "Show all available commands",
+      "file": "commands/help.md",
+      "category": "meta"
+    }
+  ],
+
+  "commandCategories": {
+    "session": {
+      "name": "Session Management",
+      "description": "Start, pause, and manage work sessions"
+    },
+    "tasks": {
+      "name": "Task Management",
+      "description": "Create, track, and complete tasks"
+    },
+    "seo": {
+      "name": "SEO & Analytics",
+      "description": "SEO analysis and optimization (requires MCPs)"
+    },
+    "quality": {
+      "name": "Quality & Auditing",
+      "description": "Content and site quality audits"
+    },
+    "meta": {
+      "name": "Setup & Help",
+      "description": "Configuration and documentation"
+    }
+  },
+
+  "skills": {
+    "ct-task-manager": {
+      "description": "Core task management skill for CRUD operations",
+      "file": "skills/ct-task-manager/SKILL.md",
+      "capabilities": ["task-create", "task-update", "task-complete", "task-list"]
+    },
+    "ct-seo-auditor": {
+      "description": "Content SEO auditing with 0-100 scoring",
+      "file": "skills/ct-seo-auditor/SKILL.md",
+      "capabilities": ["audit-content", "audit-quick", "audit-eeat", "audit-batch"],
+      "dispatch_triggers": ["audit content", "seo audit", "check seo", "eeat analysis"]
+    },
+    "ct-gsc-analyst": {
+      "description": "Google Search Console analysis for SEO opportunities",
+      "file": "skills/ct-gsc-analyst/SKILL.md",
+      "capabilities": ["seo-wins", "seo-gaps", "seo-roi", "seo-refresh", "seo-impact"],
+      "dispatch_triggers": ["quick wins", "seo opportunities", "ranking analysis"],
+      "requires": ["gsc"]
+    },
+    "ct-content-strategist": {
+      "description": "Keyword research and content strategy",
+      "file": "skills/ct-content-strategist/SKILL.md",
+      "capabilities": ["keyword-research", "topic-clustering", "content-gaps"],
+      "dispatch_triggers": ["keyword research", "content strategy", "topic ideas"],
+      "requires": ["dataforseo"]
+    },
+    "ct-metrics-store": {
+      "description": "SQLite-based metrics storage for SEO time-series data",
+      "file": "skills/ct-metrics-store/SKILL.md",
+      "capabilities": ["audit-history", "keyword-cache", "gsc-snapshots"]
+    }
+  },
+
+  "adapters": {
+    "astro": {
+      "description": "Astro framework adapter for route detection and project understanding",
+      "file": "adapters/astro/ADAPTER.md",
+      "detects": ["astro.config.mjs", "astro.config.js", "astro.config.ts"],
+      "requires": ["astro-docs", "astro-mcp"]
+    },
+    "next": {
+      "description": "Next.js framework adapter (coming soon)",
+      "file": "adapters/next/ADAPTER.md",
+      "detects": ["next.config.js", "next.config.mjs"],
+      "status": "planned"
+    },
+    "nuxt": {
+      "description": "Nuxt framework adapter (coming soon)",
+      "file": "adapters/nuxt/ADAPTER.md",
+      "detects": ["nuxt.config.js", "nuxt.config.ts"],
+      "status": "planned"
+    }
+  },
+
+  "mcp": {
+    "servers": {
+      "gsc": {
+        "description": "Google Search Console API - ranking data, CTR, impressions",
+        "package": "gsc-mcp-server",
+        "required": true,
+        "requiredFor": ["seo-wins", "seo-gaps", "seo-roi", "seo-refresh", "seo-impact", "audit-content"],
+        "env": ["GOOGLE_APPLICATION_CREDENTIALS", "GSC_SITE_URL"]
+      },
+      "dataforseo": {
+        "description": "Keyword research, search volume, SERP features, PAA",
+        "command": "npx",
+        "args": ["-y", "dataforseo-mcp-server"],
+        "required": true,
+        "requiredFor": ["seo-keywords", "audit-content", "seo-gaps"],
+        "env": ["DATAFORSEO_USERNAME", "DATAFORSEO_PASSWORD"]
+      },
+      "astro-docs": {
+        "description": "Official Astro documentation search",
+        "url": "https://mcp.docs.astro.build/mcp",
+        "type": "http",
+        "requiredWhen": "adapter=astro",
+        "requiredFor": ["astro-check"]
+      },
+      "astro-mcp": {
+        "description": "Astro project integration - routes, config, collections",
+        "package": "astro-mcp",
+        "type": "integration",
+        "requiredWhen": "adapter=astro",
+        "requiredFor": ["astro-check", "status"]
+      },
+      "scraperapi": {
+        "description": "Web scraping for competitor content analysis",
+        "command": "npx",
+        "args": ["@scraperapi/mcp"],
+        "optional": true,
+        "requiredFor": ["audit-content competitor analysis"],
+        "env": ["SCRAPERAPI_KEY"]
+      }
+    }
+  },
+
+  "config": {
+    "requiredEnv": [],
+    "optionalEnv": [
+      {
+        "name": "GSC_SITE_URL",
+        "description": "Google Search Console site URL",
+        "example": "https://example.com/"
+      },
+      {
+        "name": "GOOGLE_APPLICATION_CREDENTIALS",
+        "description": "Path to GSC service account JSON",
+        "example": "./credentials/gsc-service-account.json"
+      },
+      {
+        "name": "DATAFORSEO_USERNAME",
+        "description": "DataForSEO API username"
+      },
+      {
+        "name": "DATAFORSEO_PASSWORD",
+        "description": "DataForSEO API password"
+      },
+      {
+        "name": "SCRAPERAPI_KEY",
+        "description": "ScraperAPI key for competitor analysis"
+      }
+    ],
+    "defaults": {
+      "dataDir": ".cleo-web",
+      "backupRetention": 5,
+      "mcpFailFast": true
+    }
+  },
+
+  "files": {
+    "created": [
+      ".cleo-web/",
+      ".cleo-web/todo.json",
+      ".cleo-web/config.json",
+      ".cleo-web/metrics.db",
+      "CLAUDE.md"
+    ],
+    "optional": [
+      ".env"
+    ]
+  }
+}
