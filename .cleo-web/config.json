@@ -1,0 +1,9 @@
+{
+  "framework": "generic",
+  "siteUrl": null,
+  "mcps": {
+    "gsc": false,
+    "dataforseo": false,
+    "scraperapi": false
+  }
+}

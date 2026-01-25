@@ -96,10 +96,11 @@ cleo-web uses a **fail-fast** approach - commands that need MCPs will fail early
 
 ## Commands
 
-### Session
+### Session & Status
 | Command | Description |
 |---------|-------------|
 | `/start` | Begin session with MCP verification + site health check |
+| `/status` | Show current project and session status |
 | `/session pause` | Pause current session |
 | `/session resume` | Resume paused session |
 | `/session end` | End session with summary |
@@ -160,6 +161,21 @@ cleo-web uses a **fail-fast** approach - commands that need MCPs will fail early
 | `/competitor list` | Show tracked competitors |
 | `/competitor remove <domain>` | Stop tracking competitor |
 | `/competitor analyze [domain]` | Deep competitive analysis |
+
+### Development (Astro Projects)
+| Command | Description |
+|---------|-------------|
+| `/astro-check` | Pre-deployment validation (config, routes, best practices) |
+| `/astro-check --fix` | Auto-fix supported issues |
+| `/feature "description"` | Spec-driven feature development workflow |
+
+### Meta Commands
+| Command | Description |
+|---------|-------------|
+| `/help` | Show all available commands with descriptions |
+| `/setup verify` | Verify installation and MCP configuration |
+| `/setup init` | Re-initialize data directory |
+| `/setup mcps` | Show MCP setup instructions |
 
 ## Audit Categories
 

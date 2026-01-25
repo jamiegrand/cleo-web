@@ -90,12 +90,18 @@ Session: sess_20260124_001
 Active time: 1h 30m
 Tasks completed: 2
 
+In-progress work:
+  T003: Optimize homepage LCP (50% complete)
+  Last action: Identified hero image as bottleneck
+
+Handoff document saved: .cleo-web/HANDOFF.md
+
 Session saved. Run /session resume to continue.
 ```
 
 ### /session resume
 
-Resume a paused session with full context.
+Resume a paused session with full context from HANDOFF.md.
 
 ```
 SESSION RESUMED
@@ -104,10 +110,23 @@ SESSION RESUMED
 Session: sess_20260124_001
 Paused for: 45 minutes
 
-Restoring context...
+Loading handoff document...
+
+Context restored:
   Site health: 72/100 (unchanged)
   Active tasks: 3 (T003 in_progress)
-  Last action: Completed T002 (Add Organization schema)
+  Last action: Identified hero image as bottleneck
+
+In-progress work:
+  T003: Optimize homepage LCP
+  Next step: Implement responsive images
+
+Open questions from last session:
+  • Need to decide: Use WebP or AVIF for hero image?
+
+Suggested next steps:
+  1. Complete T003 (LCP optimization)
+  2. Run /seo impact to measure improvement
 
 Ready to continue.
 ```
@@ -247,7 +266,8 @@ Sessions track:
 1. Record pause timestamp
 2. Calculate active time so far
 3. Save current context snapshot
-4. Update sessions.json
+4. Generate HANDOFF.md document
+5. Update sessions.json
 
 ### Resuming a Session
 
@@ -297,6 +317,72 @@ Options:
 
 Select option:
 ```
+
+## HANDOFF.md Generation
+
+When a session is paused, a HANDOFF.md file is generated at `.cleo-web/HANDOFF.md` to provide rich context for resumption.
+
+### HANDOFF.md Structure
+
+```markdown
+# Session Handoff
+
+## Session Info
+- **Session ID**: sess_20260124_001
+- **Paused At**: 2026-01-24 14:30:00
+- **Active Time**: 1h 30m
+
+## Current State
+
+### In-Progress Task
+- **T003**: Optimize homepage LCP
+  - Status: 50% complete
+  - Last action: Identified hero image as bottleneck
+  - Next step: Implement responsive images
+
+### Site Health
+- Score: 72/100 (Fair)
+- Change this session: +4 points
+
+## Work Summary
+- Tasks completed: 2 (T001, T002)
+- Tasks created: 1 (T004)
+- Audits run: 1
+
+## Open Questions / Blockers
+- Need to decide: Use WebP or AVIF for hero image?
+- Waiting on: Client approval for new color scheme
+
+## Context for Resumption
+- Working in: /src/pages/index.astro
+- Related files: /src/components/Hero.astro
+- Relevant audit: Site audit from 2026-01-24
+
+## Suggested Next Steps
+1. Complete T003 (LCP optimization)
+2. Run /seo impact to measure improvement
+3. Start on T004 (Add FAQ schema)
+```
+
+### When HANDOFF.md is Generated
+
+- **On `/session pause`**: Always generated
+- **On `/session end`**: Not generated (session complete)
+- **On auto-pause** (timeout): Generated with stale warning
+
+### When HANDOFF.md is Read
+
+- **On `/session resume`**: Loaded and displayed
+- **On `/start`** (with paused session): Shown in resume offer
+
+### HANDOFF.md vs sessions.json
+
+| Aspect | sessions.json | HANDOFF.md |
+|--------|--------------|------------|
+| Format | JSON (machine) | Markdown (human) |
+| Purpose | State persistence | Context restoration |
+| Content | Minimal data | Rich narrative |
+| Audience | System | Agent + User |
 
 ## Dependencies
 
