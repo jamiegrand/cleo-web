@@ -4,21 +4,23 @@ Task management + SEO workflows for web developers. A Claude Code plugin combini
 
 ## Documentation
 
-| Document | Description |
-|----------|-------------|
-| [Getting Started](docs/GETTING-STARTED.md) | Installation and setup guide |
-| [User Guide](docs/USER-GUIDE.md) | Complete feature documentation |
-| [MCP Setup](docs/mcp-setup.md) | MCP server configuration |
+| Document                                   | Description                    |
+| ------------------------------------------ | ------------------------------ |
+| [Getting Started](docs/GETTING-STARTED.md) | Installation and setup guide   |
+| [User Guide](docs/USER-GUIDE.md)           | Complete feature documentation |
+| [MCP Setup](docs/mcp-setup.md)             | MCP server configuration       |
 
 ## Features
 
 ### Task Management (from CLEO)
+
 - Epic/Task/Subtask hierarchy
 - **Session tracking** with pause/resume and context persistence
 - Atomic file operations with automatic backups
 - JSON Schema validation
 
 ### SEO Workflows
+
 - **Site-wide auditing** with 105+ checks across 11 categories
 - Content auditing with 0-100 scoring
 - **Mobile-specific audits** - Core Web Vitals, viewport, tap targets
@@ -35,6 +37,7 @@ Task management + SEO workflows for web developers. A Claude Code plugin combini
 - Optional visual testing with Playwright
 
 ### Framework Adapters
+
 - **Astro** - Full support with route detection
 - **Next.js** - Coming soon
 - **Nuxt** - Coming soon
@@ -81,123 +84,134 @@ cleo-web uses a **fail-fast** approach - commands that need MCPs will fail early
 
 ### Core MCPs (Required)
 
-| MCP | Purpose | Setup |
-|-----|---------|-------|
-| **gsc** | Google Search Console data | [GSC MCP Setup](docs/mcp-setup.md#gsc) |
+| MCP            | Purpose                                                      | Setup                                            |
+| -------------- | ------------------------------------------------------------ | ------------------------------------------------ |
+| **gsc**        | Google Search Console data                                   | [GSC MCP Setup](docs/mcp-setup.md#gsc)           |
 | **dataforseo** | Keyword research, Lighthouse, backlinks, competitor analysis | [DataForSEO Setup](docs/mcp-setup.md#dataforseo) |
-| **scraperapi** | HTML fetching, header analysis, meta tag parsing | [ScraperAPI Setup](docs/mcp-setup.md#scraperapi) |
+| **scraperapi** | HTML fetching, header analysis, meta tag parsing             | [ScraperAPI Setup](docs/mcp-setup.md#scraperapi) |
 
 ### Framework MCPs (When Adapter Active)
 
-| MCP | Framework | Purpose |
-|-----|-----------|---------|
-| **astro-docs** | Astro | Documentation search |
-| **astro-mcp** | Astro | Project integration |
+| MCP            | Framework | Purpose              |
+| -------------- | --------- | -------------------- |
+| **astro-docs** | Astro     | Documentation search |
+| **astro-mcp**  | Astro     | Project integration  |
 
 ## Commands
 
 ### Session & Status
-| Command | Description |
-|---------|-------------|
-| `/start` | Begin session with MCP verification + site health check |
-| `/status` | Show current project and session status |
-| `/session pause` | Pause current session |
-| `/session resume` | Resume paused session |
-| `/session end` | End session with summary |
-| `/session status` | Show current session status |
-| `/session history` | Browse past sessions |
+
+| Command            | Description                                             |
+| ------------------ | ------------------------------------------------------- |
+| `/start`           | Begin session with MCP verification + site health check |
+| `/status`          | Show current project and session status                 |
+| `/session pause`   | Pause current session                                   |
+| `/session resume`  | Resume paused session                                   |
+| `/session end`     | End session with summary                                |
+| `/session status`  | Show current session status                             |
+| `/session history` | Browse past sessions                                    |
 
 ### Tasks
-| Command | Description |
-|---------|-------------|
-| `/task add "title"` | Create a task |
-| `/task list` | List tasks |
+
+| Command             | Description    |
+| ------------------- | -------------- |
+| `/task add "title"` | Create a task  |
+| `/task list`        | List tasks     |
 | `/task complete ID` | Mark task done |
 
 ### SEO (Requires MCPs)
-| Command | Description |
-|---------|-------------|
-| `/seo wins` | Quick wins from GSC |
-| `/seo gaps` | Content opportunities |
-| `/seo roi` | Performance analysis |
-| `/seo refresh` | Declining pages |
+
+| Command        | Description           |
+| -------------- | --------------------- |
+| `/seo wins`    | Quick wins from GSC   |
+| `/seo gaps`    | Content opportunities |
+| `/seo roi`     | Performance analysis  |
+| `/seo refresh` | Declining pages       |
 
 ### Site Auditing (Requires all MCPs)
-| Command | Description |
-|---------|-------------|
-| `/audit site` | Full site-wide audit (105+ checks, 11 categories) |
-| `/audit site --quick` | Critical checks only (faster) |
-| `/audit site --category=NAME` | Category-specific audit |
-| `/audit site --skip=mobile,competitor` | Skip specific categories |
-| `/audit site --fix` | Auto-fix supported issues |
+
+| Command                                | Description                                       |
+| -------------------------------------- | ------------------------------------------------- |
+| `/audit site`                          | Full site-wide audit (105+ checks, 11 categories) |
+| `/audit site --quick`                  | Critical checks only (faster)                     |
+| `/audit site --category=NAME`          | Category-specific audit                           |
+| `/audit site --skip=mobile,competitor` | Skip specific categories                          |
+| `/audit site --fix`                    | Auto-fix supported issues                         |
 
 ### Specialized Audits
-| Command | Description |
-|---------|-------------|
-| `/audit mobile [url]` | Mobile-specific audit (CWV, viewport, tap targets) |
-| `/audit international` | hreflang and geo-targeting validation |
-| `/audit social [url]` | Open Graph and Twitter Card audit |
-| `/audit competitors` | Competitor benchmarking analysis |
+
+| Command                | Description                                        |
+| ---------------------- | -------------------------------------------------- |
+| `/audit mobile [url]`  | Mobile-specific audit (CWV, viewport, tap targets) |
+| `/audit international` | hreflang and geo-targeting validation              |
+| `/audit social [url]`  | Open Graph and Twitter Card audit                  |
+| `/audit competitors`   | Competitor benchmarking analysis                   |
 
 ### Content Auditing
-| Command | Description |
-|---------|-------------|
-| `/audit content /path` | Full 0-100 page audit |
-| `/audit quick /path` | 10-point check |
-| `/audit eeat /path` | E-E-A-T deep dive |
-| `/audit batch collection` | Batch audit pages |
+
+| Command                   | Description           |
+| ------------------------- | --------------------- |
+| `/audit content /path`    | Full 0-100 page audit |
+| `/audit quick /path`      | 10-point check        |
+| `/audit eeat /path`       | E-E-A-T deep dive     |
+| `/audit batch collection` | Batch audit pages     |
 
 ### Performance Budgets
-| Command | Description |
-|---------|-------------|
-| `/budget set <metric> <value>` | Set a performance budget |
-| `/budget list` | Show all budgets with compliance |
-| `/budget clear <metric>` | Remove a budget |
+
+| Command                        | Description                      |
+| ------------------------------ | -------------------------------- |
+| `/budget set <metric> <value>` | Set a performance budget         |
+| `/budget list`                 | Show all budgets with compliance |
+| `/budget clear <metric>`       | Remove a budget                  |
 
 ### Competitor Tracking
-| Command | Description |
-|---------|-------------|
-| `/competitor add <domain>` | Add competitor to track |
-| `/competitor list` | Show tracked competitors |
-| `/competitor remove <domain>` | Stop tracking competitor |
+
+| Command                        | Description               |
+| ------------------------------ | ------------------------- |
+| `/competitor add <domain>`     | Add competitor to track   |
+| `/competitor list`             | Show tracked competitors  |
+| `/competitor remove <domain>`  | Stop tracking competitor  |
 | `/competitor analyze [domain]` | Deep competitive analysis |
 
 ### Development (Astro Projects)
-| Command | Description |
-|---------|-------------|
-| `/astro-check` | Pre-deployment validation (config, routes, best practices) |
-| `/astro-check --fix` | Auto-fix supported issues |
-| `/feature "description"` | Spec-driven feature development workflow |
+
+| Command                  | Description                                                |
+| ------------------------ | ---------------------------------------------------------- |
+| `/astro-check`           | Pre-deployment validation (config, routes, best practices) |
+| `/astro-check --fix`     | Auto-fix supported issues                                  |
+| `/feature "description"` | Spec-driven feature development workflow                   |
 
 ### Meta Commands
-| Command | Description |
-|---------|-------------|
-| `/help` | Show all available commands with descriptions |
-| `/setup verify` | Verify installation and MCP configuration |
-| `/setup init` | Re-initialize data directory |
-| `/setup mcps` | Show MCP setup instructions |
+
+| Command         | Description                                   |
+| --------------- | --------------------------------------------- |
+| `/help`         | Show all available commands with descriptions |
+| `/setup verify` | Verify installation and MCP configuration     |
+| `/setup init`   | Re-initialize data directory                  |
+| `/setup mcps`   | Show MCP setup instructions                   |
 
 ## Audit Categories
 
 The site audit covers 11 categories with weighted scoring:
 
-| Category | Weight | Checks | Description |
-|----------|--------|--------|-------------|
-| Technical SEO | 12% | 12 | robots.txt, sitemap, canonical, HTTPS |
-| Schema Markup | 9% | 7 | Organization, WebSite, Article, FAQ |
-| E-E-A-T | 12% | 8 | Author, about page, dates, citations |
-| On-Page SEO | 12% | 20 | Titles, meta, headings, images, social meta |
-| AI Optimization | 8% | 5 | Quotable sections, FAQ format |
-| Performance | 12% | 17 | Core Web Vitals, budgets |
-| Accessibility | 9% | 8 | Contrast, keyboard, ARIA |
-| Security | 8% | 8 | Headers, SSL, privacy |
-| Mobile | 8% | 10 | Mobile CWV, viewport, tap targets |
-| International | 5% | 8 | hreflang, lang attribute, geo-targeting |
-| Competitor | 5% | 8 | Domain rank, keyword gaps, backlinks |
+| Category        | Weight | Checks | Description                                 |
+| --------------- | ------ | ------ | ------------------------------------------- |
+| Technical SEO   | 12%    | 12     | robots.txt, sitemap, canonical, HTTPS       |
+| Schema Markup   | 9%     | 7      | Organization, WebSite, Article, FAQ         |
+| E-E-A-T         | 12%    | 8      | Author, about page, dates, citations        |
+| On-Page SEO     | 12%    | 20     | Titles, meta, headings, images, social meta |
+| AI Optimization | 8%     | 5      | Quotable sections, FAQ format               |
+| Performance     | 12%    | 17     | Core Web Vitals, budgets                    |
+| Accessibility   | 9%     | 8      | Contrast, keyboard, ARIA                    |
+| Security        | 8%     | 8      | Headers, SSL, privacy                       |
+| Mobile          | 8%     | 10     | Mobile CWV, viewport, tap targets           |
+| International   | 5%     | 8      | hreflang, lang attribute, geo-targeting     |
+| Competitor      | 5%     | 8      | Domain rank, keyword gaps, backlinks        |
 
 ## Data Storage
 
 ### JSON Files (Atomic Operations)
+
 ```
 .cleo-web/
 ├── todo.json        # Task state
@@ -206,6 +220,7 @@ The site audit covers 11 categories with weighted scoring:
 ```
 
 ### SQLite Database (Time-Series)
+
 ```
 .cleo-web/metrics.db
 ├── site_audits          # Site-wide audit scores (11 categories)
@@ -245,11 +260,11 @@ cleo-web/
 All audit issues automatically create tasks in `todo.json`:
 
 | Severity | Task Priority |
-|----------|---------------|
-| Critical | critical |
-| High | high |
-| Medium | medium |
-| Low | low |
+| -------- | ------------- |
+| Critical | critical      |
+| High     | high          |
+| Medium   | medium        |
+| Low      | low           |
 
 Tasks include audit metadata (check code, category, fix suggestion) for full traceability.
 

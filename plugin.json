@@ -263,47 +263,112 @@
     "ct-task-manager": {
       "description": "Core task management skill for CRUD operations",
       "file": "skills/ct-task-manager/SKILL.md",
-      "capabilities": ["task-create", "task-update", "task-complete", "task-list"],
-      "dispatch_triggers": ["create task", "add task", "list tasks", "complete task", "update task"]
+      "capabilities": [
+        "task-create",
+        "task-update",
+        "task-complete",
+        "task-list"
+      ],
+      "dispatch_triggers": [
+        "create task",
+        "add task",
+        "list tasks",
+        "complete task",
+        "update task"
+      ]
     },
     "ct-session-manager": {
       "description": "Session lifecycle management with context persistence and time tracking",
       "file": "skills/ct-session-manager/SKILL.md",
-      "capabilities": ["session-start", "session-pause", "session-resume", "session-end", "session-history"],
-      "dispatch_triggers": ["start session", "pause session", "resume session", "end session", "session status"]
+      "capabilities": [
+        "session-start",
+        "session-pause",
+        "session-resume",
+        "session-end",
+        "session-history"
+      ],
+      "dispatch_triggers": [
+        "start session",
+        "pause session",
+        "resume session",
+        "end session",
+        "session status"
+      ]
     },
     "ct-seo-auditor": {
       "description": "Content SEO auditing with 0-100 scoring",
       "file": "skills/ct-seo-auditor/SKILL.md",
-      "capabilities": ["audit-content", "audit-quick", "audit-eeat", "audit-batch"],
-      "dispatch_triggers": ["audit content", "seo audit", "check seo", "eeat analysis"]
+      "capabilities": [
+        "audit-content",
+        "audit-quick",
+        "audit-eeat",
+        "audit-batch"
+      ],
+      "dispatch_triggers": [
+        "audit content",
+        "seo audit",
+        "check seo",
+        "eeat analysis"
+      ]
     },
     "ct-site-auditor": {
       "description": "Comprehensive site-wide audit covering Technical SEO, Schema, E-E-A-T, Performance, Accessibility, and Security",
       "file": "skills/ct-site-auditor/SKILL.md",
-      "capabilities": ["audit-site", "technical-audit", "schema-audit", "performance-audit", "accessibility-audit", "security-audit"],
-      "dispatch_triggers": ["audit site", "site audit", "full audit", "technical audit", "schema audit"],
+      "capabilities": [
+        "audit-site",
+        "technical-audit",
+        "schema-audit",
+        "performance-audit",
+        "accessibility-audit",
+        "security-audit"
+      ],
+      "dispatch_triggers": [
+        "audit site",
+        "site audit",
+        "full audit",
+        "technical audit",
+        "schema audit"
+      ],
       "requires": ["gsc", "dataforseo", "scraperapi"]
     },
     "ct-gsc-analyst": {
       "description": "Google Search Console analysis for SEO opportunities",
       "file": "skills/ct-gsc-analyst/SKILL.md",
-      "capabilities": ["seo-wins", "seo-gaps", "seo-roi", "seo-refresh", "seo-impact"],
-      "dispatch_triggers": ["quick wins", "seo opportunities", "ranking analysis"],
+      "capabilities": [
+        "seo-wins",
+        "seo-gaps",
+        "seo-roi",
+        "seo-refresh",
+        "seo-impact"
+      ],
+      "dispatch_triggers": [
+        "quick wins",
+        "seo opportunities",
+        "ranking analysis"
+      ],
       "requires": ["gsc"]
     },
     "ct-content-strategist": {
       "description": "Keyword research and content strategy",
       "file": "skills/ct-content-strategist/SKILL.md",
       "capabilities": ["keyword-research", "topic-clustering", "content-gaps"],
-      "dispatch_triggers": ["keyword research", "content strategy", "topic ideas"],
+      "dispatch_triggers": [
+        "keyword research",
+        "content strategy",
+        "topic ideas"
+      ],
       "requires": ["dataforseo"]
     },
     "ct-metrics-store": {
       "description": "SQLite-based metrics storage for SEO time-series data",
       "file": "skills/ct-metrics-store/SKILL.md",
       "capabilities": ["audit-history", "keyword-cache", "gsc-snapshots"],
-      "dispatch_triggers": ["store audit", "cache keywords", "get history", "score trends"]
+      "dispatch_triggers": [
+        "store audit",
+        "cache keywords",
+        "get history",
+        "score trends"
+      ]
     }
   },
 
@@ -311,14 +376,29 @@
     "seo-analyst": {
       "description": "SEO data interpretation specialist for GSC analysis, ranking opportunities, and ROI measurement",
       "file": "agents/seo-analyst.md",
-      "expertise": ["gsc-data", "ranking-analysis", "content-gaps", "roi-measurement"],
+      "expertise": [
+        "gsc-data",
+        "ranking-analysis",
+        "content-gaps",
+        "roi-measurement"
+      ],
       "tools": ["gsc", "dataforseo"],
-      "triggers": ["/seo wins", "/seo gaps", "/seo roi", "/seo refresh", "/seo impact"]
+      "triggers": [
+        "/seo wins",
+        "/seo gaps",
+        "/seo roi",
+        "/seo refresh",
+        "/seo impact"
+      ]
     },
     "content-strategist": {
       "description": "Content strategy expert for E-E-A-T optimization and AI-era content planning",
       "file": "agents/content-strategist.md",
-      "expertise": ["eeat-optimization", "content-lifecycle", "ai-content-strategy"],
+      "expertise": [
+        "eeat-optimization",
+        "content-lifecycle",
+        "ai-content-strategy"
+      ],
       "tools": ["dataforseo", "scraperapi", "gsc"],
       "triggers": ["/audit content", "/audit eeat", "content refresh"]
     },
@@ -358,7 +438,14 @@
         "description": "Google Search Console API - ranking data, CTR, impressions",
         "package": "gsc-mcp-server",
         "required": true,
-        "requiredFor": ["seo-wins", "seo-gaps", "seo-roi", "seo-refresh", "seo-impact", "audit-content"],
+        "requiredFor": [
+          "seo-wins",
+          "seo-gaps",
+          "seo-roi",
+          "seo-refresh",
+          "seo-impact",
+          "audit-content"
+        ],
         "env": ["GOOGLE_APPLICATION_CREDENTIALS", "GSC_SITE_URL"]
       },
       "dataforseo": {
@@ -388,7 +475,12 @@
         "command": "npx",
         "args": ["-y", "scraperapi-mcp"],
         "optional": false,
-        "requiredFor": ["audit-site", "audit-content", "audit-schema", "audit-security"],
+        "requiredFor": [
+          "audit-site",
+          "audit-content",
+          "audit-schema",
+          "audit-security"
+        ],
         "env": ["SCRAPERAPI_KEY"]
       },
       "ga4": {
@@ -447,8 +539,6 @@
       ".cleo-web/metrics.db",
       "CLAUDE.md"
     ],
-    "optional": [
-      ".env"
-    ]
+    "optional": [".env"]
   }
 }
