@@ -183,7 +183,7 @@ mkdir -p ".claude/skills"
 # Copy skill definitions from cleo-web
 if [[ -d "$SCRIPT_DIR/.claude/skills" ]]; then
     cp -r "$SCRIPT_DIR/.claude/skills/"* ".claude/skills/" 2>/dev/null || true
-    echo -e "  ${GREEN}✓${NC} Installed skills: /start, /audit, /seo, /task, /session, /budget, /competitor"
+    echo -e "  ${GREEN}✓${NC} Installed skills: /start, /audit, /seo, /task, /session, /budget, /competitor, /astro-check, /feature"
 else
     echo -e "  ${YELLOW}⚠${NC} Skills directory not found in cleo-web"
 fi
@@ -207,11 +207,20 @@ This project uses **cleo-web** for task management and SEO workflows.
 
 Type `/` to see all available commands with autocomplete:
 
+### Core Commands
 - `/start` - Begin session with MCP verification
 - `/audit` - Site-wide or content SEO audits
 - `/seo` - Quick wins, gaps, ROI analysis
 - `/task` - Task management (add, list, complete)
 - `/session` - Session lifecycle (pause, resume, end)
+
+### Development Commands (Astro)
+- `/astro-check` - Pre-deployment Astro validation
+- `/feature` - Spec-driven feature development workflow
+
+### Other Commands
+- `/budget` - Performance budget management
+- `/competitor` - Competitor analysis and tracking
 
 ## Data Storage
 
@@ -226,6 +235,10 @@ These MCPs must be configured (globally or per-project):
 - **gsc** - Google Search Console
 - **dataforseo** - Keyword research, Lighthouse
 - **scraperapi** - HTML fetching, headers
+
+### Astro-Specific MCPs (optional)
+- **astro-docs** - Astro documentation lookup
+- **astro** - Astro project integration (requires dev server)
 CLAUDEMD
 }
 
