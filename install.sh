@@ -292,7 +292,7 @@ echo "╚═══════════════════════�
 echo -e "${NC}"
 echo ""
 echo "Quick Start:"
-echo "  1. Create .env with SITE_URL and GA4_PROPERTY_ID (optional)"
+echo "  1. Create .env with SITE_URL and GA_PROPERTY_ID (optional)"
 echo "  2. Run /init to configure from .env"
 echo "  3. Run /start to begin your session"
 echo ""

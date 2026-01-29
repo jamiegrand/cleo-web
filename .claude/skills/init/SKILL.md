@@ -26,7 +26,7 @@ Look for `.env` file in project root. If not found, show instructions:
 Create a .env file with your configuration:
 
 SITE_URL=https://your-site.com
-GA4_PROPERTY_ID=properties/123456789
+GA_PROPERTY_ID=347541531
 FRAMEWORK=astro
 ```
 
@@ -37,8 +37,10 @@ Parse the `.env` file for these variables:
 | Variable | Required | Description | Example |
 |----------|----------|-------------|---------|
 | `SITE_URL` | Yes | Site URL for GSC queries | `https://example.com` |
-| `GA4_PROPERTY_ID` | No | GA4 property ID for analytics | `properties/123456789` |
+| `GA_PROPERTY_ID` | No | GA4 property ID (numeric) | `347541531` |
 | `FRAMEWORK` | No | Framework type (auto-detected if not set) | `astro`, `nextjs`, `nuxt`, `generic` |
+
+**Note:** The numeric `GA_PROPERTY_ID` is automatically formatted as `properties/XXX` when stored in config.
 
 ### Step 3: Auto-Detect Framework (if not specified)
 
@@ -89,7 +91,7 @@ Data Directory: .cleo-web/
 Run /start to begin your session
 ```
 
-If `GA4_PROPERTY_ID` is missing:
+If `GA_PROPERTY_ID` is missing:
 
 ```
 ✓ cleo-web Initialized
@@ -100,12 +102,12 @@ Configuration:
   GA4 Property: Not configured ⚠️
 
 ⚠️ Missing optional configuration:
-   GA4_PROPERTY_ID - Add to .env for real-time analytics in /start
+   GA_PROPERTY_ID - Add to .env for real-time analytics in /start
 
    To find your GA4 Property ID:
    1. Go to Google Analytics → Admin → Property Settings
-   2. Copy the Property ID (format: 123456789)
-   3. Add to .env: GA4_PROPERTY_ID=properties/123456789
+   2. Copy the Property ID (numeric, e.g., 347541531)
+   3. Add to .env: GA_PROPERTY_ID=347541531
 
 Data Directory: .cleo-web/
   ✓ config.json created
@@ -135,12 +137,30 @@ Create this in your project root:
 # Required
 SITE_URL=https://your-site.com
 
-# Optional - enables real-time analytics in /start
-GA4_PROPERTY_ID=properties/123456789
+# ============================================
+# Google Analytics (Optional)
+# ============================================
+# Property ID - for API access (Admin → Property Settings)
+GA_PROPERTY_ID=347541531
+
+# Measurement ID - for frontend tracking (not used by cleo-web)
+PUBLIC_GA_ID=G-67BSYLS8DP
 
 # Optional - auto-detected if not set
 FRAMEWORK=astro
 ```
+
+**Important:** cleo-web uses `GA_PROPERTY_ID` (the numeric Property ID) for API access via analytics-mcp. The `PUBLIC_GA_ID` (Measurement ID starting with `G-`) is for frontend gtag.js tracking and is not used by cleo-web.
+
+## Google Analytics Authentication
+
+If you see authentication errors when using analytics features, run:
+
+```bash
+gcloud auth application-default login --scopes="https://www.googleapis.com/auth/analytics.readonly,https://www.googleapis.com/auth/cloud-platform"
+```
+
+This authenticates with the required scopes for GA4 Data API access.
 
 ## Re-initialization
 

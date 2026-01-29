@@ -95,3 +95,15 @@ Priorities:
 
 💡 Tip: Connect analytics-mcp for real-time traffic insights
 ```
+
+## Troubleshooting
+
+### Analytics Authentication Errors
+
+If you see "insufficient scopes" or "reauthentication needed" errors for analytics-mcp:
+
+```bash
+gcloud auth application-default login --scopes="https://www.googleapis.com/auth/analytics.readonly,https://www.googleapis.com/auth/cloud-platform"
+```
+
+This authenticates with the required scopes for GA4 Data API access.

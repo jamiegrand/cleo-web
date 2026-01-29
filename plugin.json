@@ -483,12 +483,12 @@
         ],
         "env": ["SCRAPERAPI_KEY"]
       },
-      "ga4": {
-        "description": "Google Analytics 4 - traffic, engagement, conversions",
-        "package": "ga4-mcp-server",
+      "analytics-mcp": {
+        "description": "Google Analytics 4 - real-time traffic, engagement, conversions",
+        "package": "analytics-mcp",
         "optional": true,
-        "requiredFor": ["seo-roi"],
-        "env": ["GA4_PROPERTY_ID", "GOOGLE_APPLICATION_CREDENTIALS"]
+        "requiredFor": ["seo-roi", "seo-engagement", "audit-behavior"],
+        "env": ["GA_PROPERTY_ID", "GOOGLE_APPLICATION_CREDENTIALS"]
       }
     }
   },
@@ -519,9 +519,9 @@
         "description": "ScraperAPI key for competitor analysis"
       },
       {
-        "name": "GA4_PROPERTY_ID",
-        "description": "Google Analytics 4 property ID",
-        "example": "properties/123456789"
+        "name": "GA_PROPERTY_ID",
+        "description": "Google Analytics 4 property ID (numeric)",
+        "example": "347541531"
       }
     ],
     "defaults": {

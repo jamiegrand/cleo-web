@@ -142,7 +142,7 @@ cleo-web uses a **fail-fast** approach - commands that need MCPs will fail early
 
 | Command            | Description                                             |
 | ------------------ | ------------------------------------------------------- |
-| `/init`            | Initialize config from .env (SITE_URL, GA4_PROPERTY_ID) |
+| `/init`            | Initialize config from .env (SITE_URL, GA_PROPERTY_ID)  |
 | `/start`           | Begin session with MCP verification + site health check |
 | `/status`          | Show current project and session status                 |
 | `/session pause`   | Pause current session                                   |
@@ -261,8 +261,14 @@ Create a `.env` file in your project root:
 # Required
 SITE_URL=https://your-site.com
 
-# Optional - enables real-time analytics in /start and engagement analysis
-GA4_PROPERTY_ID=properties/123456789
+# ============================================
+# Google Analytics (Optional)
+# ============================================
+# Property ID - for API access (Admin → Property Settings)
+GA_PROPERTY_ID=347541531
+
+# Measurement ID - for frontend tracking (optional, not used by cleo-web)
+PUBLIC_GA_ID=G-XXXXXXXXXX
 
 # Optional - auto-detected if not set
 FRAMEWORK=astro
@@ -274,8 +280,20 @@ Run `/init` to generate `.cleo-web/config.json` from your `.env` file.
 
 1. Go to [Google Analytics](https://analytics.google.com)
 2. Admin → Property Settings
-3. Copy the Property ID (numeric, e.g., `123456789`)
-4. Add to `.env` as: `GA4_PROPERTY_ID=properties/123456789`
+3. Copy the **Property ID** (numeric, e.g., `347541531`)
+4. Add to `.env` as: `GA_PROPERTY_ID=347541531`
+
+> **Note:** The Property ID (numeric) is different from the Measurement ID (`G-XXXXXX`). cleo-web uses the Property ID for API access.
+
+### Google Analytics Authentication
+
+To use analytics-mcp, authenticate with the required scopes:
+
+```bash
+gcloud auth application-default login --scopes="https://www.googleapis.com/auth/analytics.readonly,https://www.googleapis.com/auth/cloud-platform"
+```
+
+This is required for GA4 Data API access. Run this once, or again if you see "insufficient scopes" errors.
 
 ## Data Storage
 
