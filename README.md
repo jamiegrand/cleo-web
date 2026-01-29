@@ -21,15 +21,17 @@ Task management + SEO workflows for web developers. A Claude Code plugin combini
 
 ### SEO Workflows
 
-- **Site-wide auditing** with 105+ checks across 11 categories
+- **Site-wide auditing** with 113+ checks across 12 categories
 - Content auditing with 0-100 scoring
 - **Mobile-specific audits** - Core Web Vitals, viewport, tap targets
 - **International SEO** - hreflang validation, geo-targeting
 - **Social meta audits** - Open Graph, Twitter Cards
+- **User behavior audits** - GA4 engagement, bounce rate, conversions
 - **Performance budgets** - Set and track thresholds
 - **Competitor benchmarking** - Domain comparison, keyword gaps
 - **JSON-LD schema validation** with rich results eligibility checking
 - GSC quick wins analysis
+- **GA4 engagement analysis** - Organic traffic quality, ROI insights
 - E-E-A-T deep dives
 - Keyword research caching
 - SQLite metrics storage for trend analysis
@@ -53,16 +55,44 @@ cd your-project
 /path/to/cleo-web/install.sh
 ```
 
+## Updating
+
+To update an existing installation (preserves your data):
+
+```bash
+# Pull latest changes
+cd /path/to/cleo-web
+git pull
+
+# Update your project
+cd your-project
+/path/to/cleo-web/update.sh
+```
+
+Or use the `/update` command within Claude Code for guidance.
+
+**What gets updated:**
+- Skills (overwritten with latest)
+- Database schema (migrations applied)
+
+**What's preserved:**
+- `.cleo-web/todo.json` (your tasks)
+- `.cleo-web/config.json` (your configuration)
+- `.cleo-web/metrics.db` (all audit history)
+
 ## Quick Start
 
 ```bash
-# Start a session (verifies MCPs, shows priorities)
+# Initialize configuration from .env
+/init
+
+# Start a session (verifies MCPs, shows real-time analytics)
 /start
 
 # Add a task
 /task add "Optimize homepage meta description"
 
-# Run a full site audit (105+ checks)
+# Run a full site audit (113+ checks, 12 categories)
 /audit site
 
 # Run an SEO audit on a specific page
@@ -70,6 +100,9 @@ cd your-project
 
 # Find quick wins from GSC
 /seo wins
+
+# Analyze engagement from organic traffic
+/seo engagement
 
 # Set performance budgets
 /budget set lcp 2500
@@ -90,6 +123,12 @@ cleo-web uses a **fail-fast** approach - commands that need MCPs will fail early
 | **dataforseo** | Keyword research, Lighthouse, backlinks, competitor analysis | [DataForSEO Setup](docs/mcp-setup.md#dataforseo) |
 | **scraperapi** | HTML fetching, header analysis, meta tag parsing             | [ScraperAPI Setup](docs/mcp-setup.md#scraperapi) |
 
+### Optional MCPs
+
+| MCP               | Purpose                                           | Setup                                                  |
+| ----------------- | ------------------------------------------------- | ------------------------------------------------------ |
+| **analytics-mcp** | GA4 real-time traffic, engagement, conversions    | [Analytics MCP Setup](docs/mcp-setup.md#analytics-mcp) |
+
 ### Framework MCPs (When Adapter Active)
 
 | MCP            | Framework | Purpose              |
@@ -99,10 +138,11 @@ cleo-web uses a **fail-fast** approach - commands that need MCPs will fail early
 
 ## Commands
 
-### Session & Status
+### Setup & Session
 
 | Command            | Description                                             |
 | ------------------ | ------------------------------------------------------- |
+| `/init`            | Initialize config from .env (SITE_URL, GA4_PROPERTY_ID) |
 | `/start`           | Begin session with MCP verification + site health check |
 | `/status`          | Show current project and session status                 |
 | `/session pause`   | Pause current session                                   |
@@ -121,12 +161,13 @@ cleo-web uses a **fail-fast** approach - commands that need MCPs will fail early
 
 ### SEO (Requires MCPs)
 
-| Command        | Description           |
-| -------------- | --------------------- |
-| `/seo wins`    | Quick wins from GSC   |
-| `/seo gaps`    | Content opportunities |
-| `/seo roi`     | Performance analysis  |
-| `/seo refresh` | Declining pages       |
+| Command           | Description                              |
+| ----------------- | ---------------------------------------- |
+| `/seo wins`       | Quick wins from GSC                      |
+| `/seo gaps`       | Content opportunities                    |
+| `/seo roi`        | Performance analysis (GSC + GA4)         |
+| `/seo refresh`    | Declining pages (GSC + GA4 correlation)  |
+| `/seo engagement` | Engagement quality from organic traffic  |
 
 ### Site Auditing (Requires all MCPs)
 
@@ -145,6 +186,7 @@ cleo-web uses a **fail-fast** approach - commands that need MCPs will fail early
 | `/audit mobile [url]`  | Mobile-specific audit (CWV, viewport, tap targets) |
 | `/audit international` | hreflang and geo-targeting validation              |
 | `/audit social [url]`  | Open Graph and Twitter Card audit                  |
+| `/audit behavior`      | User behavior audit (GA4 engagement, bounce rate)  |
 | `/audit competitors`   | Competitor benchmarking analysis                   |
 
 ### Content Auditing
@@ -185,6 +227,8 @@ cleo-web uses a **fail-fast** approach - commands that need MCPs will fail early
 
 | Command         | Description                                   |
 | --------------- | --------------------------------------------- |
+| `/init`         | Initialize config from .env file              |
+| `/update`       | Update skills and run database migrations     |
 | `/help`         | Show all available commands with descriptions |
 | `/setup verify` | Verify installation and MCP configuration     |
 | `/setup init`   | Re-initialize data directory                  |
@@ -192,21 +236,46 @@ cleo-web uses a **fail-fast** approach - commands that need MCPs will fail early
 
 ## Audit Categories
 
-The site audit covers 11 categories with weighted scoring:
+The site audit covers 12 categories with weighted scoring:
 
-| Category        | Weight | Checks | Description                                 |
-| --------------- | ------ | ------ | ------------------------------------------- |
-| Technical SEO   | 12%    | 12     | robots.txt, sitemap, canonical, HTTPS       |
-| Schema Markup   | 9%     | 7      | Organization, WebSite, Article, FAQ         |
-| E-E-A-T         | 12%    | 8      | Author, about page, dates, citations        |
-| On-Page SEO     | 12%    | 20     | Titles, meta, headings, images, social meta |
-| AI Optimization | 8%     | 5      | Quotable sections, FAQ format               |
-| Performance     | 12%    | 17     | Core Web Vitals, budgets                    |
-| Accessibility   | 9%     | 8      | Contrast, keyboard, ARIA                    |
-| Security        | 8%     | 8      | Headers, SSL, privacy                       |
-| Mobile          | 8%     | 10     | Mobile CWV, viewport, tap targets           |
-| International   | 5%     | 8      | hreflang, lang attribute, geo-targeting     |
-| Competitor      | 5%     | 8      | Domain rank, keyword gaps, backlinks        |
+| Category        | Weight | Checks | Description                                     |
+| --------------- | ------ | ------ | ----------------------------------------------- |
+| Technical SEO   | 11%    | 12     | robots.txt, sitemap, canonical, HTTPS           |
+| Schema Markup   | 8%     | 7      | Organization, WebSite, Article, FAQ             |
+| E-E-A-T         | 11%    | 8      | Author, about page, dates, citations            |
+| On-Page SEO     | 11%    | 20     | Titles, meta, headings, images, social meta     |
+| AI Optimization | 7%     | 5      | Quotable sections, FAQ format                   |
+| Performance     | 11%    | 17     | Core Web Vitals, budgets                        |
+| Accessibility   | 8%     | 8      | Contrast, keyboard, ARIA                        |
+| Security        | 7%     | 8      | Headers, SSL, privacy                           |
+| Mobile          | 7%     | 10     | Mobile CWV, viewport, tap targets               |
+| International   | 5%     | 8      | hreflang, lang attribute, geo-targeting         |
+| Behavior        | 9%     | 8      | GA4 engagement, bounce rate, session duration   |
+| Competitor      | 5%     | 8      | Domain rank, keyword gaps, backlinks            |
+
+## Configuration
+
+Create a `.env` file in your project root:
+
+```env
+# Required
+SITE_URL=https://your-site.com
+
+# Optional - enables real-time analytics in /start and engagement analysis
+GA4_PROPERTY_ID=properties/123456789
+
+# Optional - auto-detected if not set
+FRAMEWORK=astro
+```
+
+Run `/init` to generate `.cleo-web/config.json` from your `.env` file.
+
+### Finding Your GA4 Property ID
+
+1. Go to [Google Analytics](https://analytics.google.com)
+2. Admin → Property Settings
+3. Copy the Property ID (numeric, e.g., `123456789`)
+4. Add to `.env` as: `GA4_PROPERTY_ID=properties/123456789`
 
 ## Data Storage
 
@@ -215,7 +284,7 @@ The site audit covers 11 categories with weighted scoring:
 ```
 .cleo-web/
 ├── todo.json        # Task state
-├── config.json      # Configuration
+├── config.json      # Configuration (from /init)
 └── backups/         # Automatic backups
 ```
 
@@ -223,14 +292,15 @@ The site audit covers 11 categories with weighted scoring:
 
 ```
 .cleo-web/metrics.db
-├── site_audits          # Site-wide audit scores (11 categories)
+├── site_audits          # Site-wide audit scores (12 categories)
 ├── audit_checks         # Individual check results
-├── check_definitions    # 105+ check definitions
+├── check_definitions    # 113+ check definitions
 ├── lighthouse_snapshots # Core Web Vitals history
 ├── backlink_snapshots   # Backlink profile history
 ├── mobile_audits        # Mobile-specific results
 ├── hreflang_analysis    # International SEO data
 ├── social_meta_analysis # OG/Twitter tag data
+├── behavior_analysis    # GA4 engagement metrics
 ├── performance_budgets  # Budget thresholds
 ├── budget_compliance    # Budget compliance history
 ├── competitors          # Tracked competitors

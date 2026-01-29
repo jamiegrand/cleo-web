@@ -2,7 +2,7 @@
 name: audit
 description: Run SEO audits - site-wide or single page content audits
 disable-model-invocation: true
-argument-hint: [site|content|quick|mobile|international|social|competitors] [path]
+argument-hint: [site|content|quick|mobile|international|social|competitors|behavior] [path]
 ---
 
 # Audit Command
@@ -82,6 +82,38 @@ Uses:
 - `mcp__dataforseo__dataforseo_labs_google_domain_intersection`
 - `mcp__dataforseo__backlinks_competitors`
 
+### `/audit behavior [url]` - User Behavior Audit (NEW)
+Analyze user engagement patterns from GA4:
+
+Uses `mcp__analytics-mcp__run_report` with engagement metrics.
+
+**Checks:**
+- BEHAV001: Homepage bounce rate < 50%
+- BEHAV002: Site-wide engagement rate > 50%
+- BEHAV003: Avg session duration > 60 seconds
+- BEHAV004: Key landing pages have conversions
+- BEHAV005: No high-exit pages without CTAs
+- BEHAV006: Organic traffic engagement vs direct comparison
+- BEHAV007: Mobile engagement parity with desktop
+- BEHAV008: New vs returning user engagement balance
+
+**Output:**
+```
+USER BEHAVIOR AUDIT
+────────────────────────────────────────
+
+✓ BEHAV001: Homepage bounce rate 42% (< 50%)
+✗ BEHAV002: Engagement rate 38% (target: > 50%)
+  → Add interactive elements, improve content quality
+✓ BEHAV003: Avg session duration 1m 45s
+✗ BEHAV004: /services has 0 conversions from 230 sessions
+  → Add clear CTA, contact form, or demo booking
+⚠ BEHAV007: Mobile engagement 15% lower than desktop
+  → Review mobile UX, tap targets, load times
+
+Score: 62/100
+```
+
 ### `/audit content <path>` - Single Page Audit
 Audit a specific page for content SEO:
 - Read the file at the given path
@@ -106,6 +138,7 @@ Fast audit covering essentials:
 - `gsc` - For indexing status, crawl errors
 - `dataforseo` - For Lighthouse, keyword data, competitor analysis
 - `scraperapi` - For HTML parsing, headers
+- `analytics-mcp` - For GA4 user behavior data (engagement, bounce rate, conversions)
 
 ## Output
 Results stored in `.cleo-web/metrics.db`:
@@ -115,22 +148,24 @@ Results stored in `.cleo-web/metrics.db`:
 - `hreflang_analysis` - International SEO data
 - `social_meta_analysis` - OG/Twitter tag data
 - `competitor_snapshots` - Competitor comparison data
+- `behavior_analysis` - GA4 engagement metrics (bounce rate, engagement rate, session duration)
 
 **ALL issues** (critical, high, medium, low) automatically create tasks in todo.json.
 
 ## Category Weights (Overall Score)
 
 ```
-Technical:      12%
-Schema:          9%
-E-E-A-T:        12%
-On-Page:        12% (includes social)
-AI:              8%
-Performance:    12% (includes budgets)
-Accessibility:   9%
-Security:        8%
-Mobile:          8%
+Technical:      11%
+Schema:          8%
+E-E-A-T:        11%
+On-Page:        11% (includes social)
+AI:              7%
+Performance:    11% (includes budgets)
+Accessibility:   8%
+Security:        7%
+Mobile:          7%
 International:   5%
+Behavior:        9% (GA4 engagement data)
 Competitor:      5% (optional)
 ```
 

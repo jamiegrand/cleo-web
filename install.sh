@@ -183,7 +183,7 @@ mkdir -p ".claude/skills"
 # Copy skill definitions from cleo-web
 if [[ -d "$SCRIPT_DIR/.claude/skills" ]]; then
     cp -r "$SCRIPT_DIR/.claude/skills/"* ".claude/skills/" 2>/dev/null || true
-    echo -e "  ${GREEN}✓${NC} Installed skills: /start, /audit, /seo, /task, /session, /budget, /competitor, /astro-check, /feature"
+    echo -e "  ${GREEN}✓${NC} Installed skills: /start, /init, /update, /audit, /seo, /task, /session, /budget, /competitor, /astro-check, /feature"
 else
     echo -e "  ${YELLOW}⚠${NC} Skills directory not found in cleo-web"
 fi
@@ -292,9 +292,12 @@ echo "╚═══════════════════════�
 echo -e "${NC}"
 echo ""
 echo "Quick Start:"
-echo "  1. Run /start in Claude Code to begin"
-echo "  2. Create tasks with /task add \"title\""
-echo "  3. Audit pages with /audit content /path"
+echo "  1. Create .env with SITE_URL and GA4_PROPERTY_ID (optional)"
+echo "  2. Run /init to configure from .env"
+echo "  3. Run /start to begin your session"
+echo ""
+echo "To update later:"
+echo "  git pull && $SCRIPT_DIR/update.sh"
 echo ""
 echo "Data stored in: $DATA_DIR/"
 echo ""
